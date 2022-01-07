@@ -20,31 +20,6 @@ connectdb = None
 
 global txtF
 txtF = None
-class TableModel(QtCore.QAbstractTableModel):
-    def __init__(self, data):
-        super(TableModel, self).__init__()
-        self._data = data
-
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-            return self._data[index.row()][index.column()]
-
-    def rowCount(self, index):
-        return len(self._data)
-
-    def columnCount(self, index):
-        return len(self._data[0])
-    
-    def headerData(self, section, orientation, role):
-        # section is the index of the column/row.
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
-                column_label = ['A', 'B1', 'B2']
-                return column_label[section]
-
-            if orientation == Qt.Vertical:
-                row_label = ['Device', 'ID', 'Operation', 'Weigth', 'Row 5', 'No Show']
-                return row_label[section]
 
 
 class Gui(base_1, form_1):
@@ -215,13 +190,13 @@ class Main(base_2, form_2):
         num = c.execute(sqlite3_select_like)
         thread = 0
         ran = self.Getdbrange()
-        self.model = TableModel(num)
-        self.tableView.setModel(self.model)
+
+        self.textBrowser.clear()
         for line in num:
-            print (line)
+            self.textBrowser.append(str(list(line)))
         #self.tableView.setColumnCount(6)
         #self.tableView.setHorizontalHeader(["ID", "Year", "Month", "Day", "Time", "Memo"])
-        #self.tableView.setModel(memok)
+    
             if thread < 100:
                 thread += 100/ran
             else:
