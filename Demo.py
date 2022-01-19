@@ -20,7 +20,13 @@ connectdb = None
 
 global txtF
 txtF = None
+"""
+class Crypto():
+    def encypto(self,arg):
 
+    def dicypto(self,arg):
+
+"""
 
 class Gui(base_1, form_1):
     def __init__(self):
@@ -85,7 +91,7 @@ class Gui(base_1, form_1):
         connt.execute("INSERT INTO USER VALUES(?);",[nm])
         connt.commit()
         connt.execute("CREATE TABLE MEMORANDUM (ID INTEGER, Year INTEGER, Month INTEGER, Day INTEGER, Time TEXT, Memo TEXT);")
-        connt.execute("INSERT INTO MEMORANDUM VALUES (?, ?, ?, ?, ?, ?);",(0,0000,00,00,'00:00','None'))
+        connt.execute("INSERT INTO MEMORANDUM VALUES (?, ?, ?, ?, ?, ?);",(0, Main.Timeget(self,5) ,Main.Timeget(self,4), Main.Timeget(self,3), Main.Timeget(self,2), 'None'))
         connt.commit()
         connt.close()
         cncl = '<span style=\" color: cyan;\">%s</span>' % nm
@@ -121,9 +127,12 @@ class Main(base_2, form_2):
         
         self.insertButton.clicked.connect(self.Insertdb)
 
+
+        self.tableWidget.horizontalHeader().setSectionResizeMode(1)
+        self.tableWidget.setHorizontalHeaderLabels(["Number","Year","Month","Day","Time","Memo"])
         self.Search_Button.clicked.connect(self.Searchdb)
 
-        self.Categories()
+        self.TimeFilter()
         
         #timeshow
         timer = QTimer(self)
@@ -136,6 +145,8 @@ class Main(base_2, form_2):
         self.txt_select.clicked.connect(self.txtselect)
         self.PasteButton.clicked.connect(self.PasteText)
         self.DataUpdate_Button.clicked.connect(self.dbUpdate)
+
+              
         
 
     def SB_range(self):
@@ -179,7 +190,6 @@ class Main(base_2, form_2):
         self.Insert_Data.clear()
 
     def Searchdb(self):
-        #self.tableView.clearSpans()
         global conpath
         db = conpath
         conn = sqlite3.connect(db)
@@ -187,26 +197,39 @@ class Main(base_2, form_2):
 
         keyword = self.lineEdit.text()
         sqlite3_select_like =  "SELECT * FROM MEMORANDUM WHERE Memo LIKE '%"+keyword+"%';"
-        num = c.execute(sqlite3_select_like)
+        c.execute(sqlite3_select_like)
         thread = 0
-        ran = self.Getdbrange()
+        rowct = c.fetchall()
+        if len(rowct) == 0:
+            print("debug")
+            self.tableWidget.setRowCount(0)
+            self.label_6.setText("<strong>Search Done System No Results!</strong>")
+            self.progressBar_search.setValue(100)
+        else:
+            self.tableWidget.setRowCount(0)
+            for row_number, row_data in enumerate(rowct):
+                self.tableWidget.insertRow(row_number)
+                thread += 100/len(rowct)
+                self.progressBar_search.setValue(int(thread))
+                for column_number, data in enumerate(row_data):
+                    self.tableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+            self.label_6.setText("<span style=\" color: Green;\">Search Done!</span>")
 
-        self.textBrowser.clear()
-        for line in num:
-            self.textBrowser.append(str(list(line)))
-        #self.tableView.setColumnCount(6)
-        #self.tableView.setHorizontalHeader(["ID", "Year", "Month", "Day", "Time", "Memo"])
+        conn.close()
+
     
-            if thread < 100:
-                thread += 100/ran
-            else:
-                self.progressBar_search.setValue(0)
-                self.label_6.setText("Search done!")
-            self.progressBar_search.setValue(thread)
-    
-    def Categories(self):
-        year = self.Getyear()
-        for y in range(2020,year+1):
+    def TimeFilter(self):
+
+        global conpath
+        db = conpath
+        conn = sqlite3.connect(db)
+        c = conn.cursor()
+        c.execute("SELECT Year FROM MEMORANDUM;")
+        Yr = c.fetchall()
+        lasty = int(''.join(map(str,Yr[-1])))
+        fsty = int(''.join(map(str,Yr[0]))) 
+
+        for y in range(fsty,lasty+1):
             yr = str(y)
             self.comboBox.addItem(yr)
         for m in range(1,13):
@@ -216,15 +239,6 @@ class Main(base_2, form_2):
             da = str(d)
             self.comboBox_3.addItem(da)
 
-    def Getyear(self):
-        global conpath
-        db = conpath
-        conn = sqlite3.connect(db)
-        c = conn.cursor()
-        c.execute("SELECT Year FROM MEMORANDUM;")
-        Yr = c.fetchall()
-        lasty = int(''.join(map(str,Yr[-1])))
-        return lasty
 
     def Getdbrange(self):
         global conpath
@@ -341,6 +355,17 @@ class Main(base_2, form_2):
 
         self.setFixedSize(240,130)
         self.setWindowTitle('ACCESS CONTROL')
+        
+        self.Login_Button.clicked.connect(self.Password)
+    
+    def Password(self):
+        global Password
+        Password = self.Password_Text.Text()
+        dbp = Decryption(db.p)
+        if p == dbp :
+            loadMain
+        else:
+            Error
 
 """
 
