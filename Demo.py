@@ -1,9 +1,10 @@
 import os
 import sys
+
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
-from PyQt5 import uic
 from PyQt5.QtCore import QDateTime, QTimer , Qt
+from PyQt5 import QtGui, uic
+
 import sqlite3
 from Crypto.Cipher import AES
 
@@ -210,7 +211,7 @@ class Main(base_2, form_2):
             for row_number, row_data in enumerate(rowct):
                 self.tableWidget.insertRow(row_number)
                 thread += 100/len(rowct)
-                self.progressBar_search.setValue(int(thread))
+                self.progressBar_search.setValue(round(thread))
                 for column_number, data in enumerate(row_data):
                     self.tableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
             self.label_6.setText("<span style=\" color: Green;\">Search Done!</span>")
