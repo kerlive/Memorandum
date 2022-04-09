@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="image">
+    <file>UI/UI_Element/clock.png</file>
+    <file>UI/UI_Element/bbk.png</file>
+    <file>UI/UI_Element/Button_TitleStyle.png</file>
+    <file>UI/UI_Element/done.png</file>
+    <file>UI/UI_Element/live.png</file>
+    <file>UI/UI_Element/off.png</file>
+  </qresource>
+  <qresource prefix="music">
+    <file>Music/Alarm.mp3</file>
+  </qresource>
+  <qresource prefix="icon">
+    <file>UI/UI_Element/icon/guide.png</file>
+    <file>UI/UI_Element/icon/Memorandum_ico.ico</file>
+  </qresource>
+</RCC>

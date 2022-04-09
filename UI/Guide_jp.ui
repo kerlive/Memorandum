@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form1</class>
+ <widget class="QWidget" name="Form1">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ガイド</string>
+  </property>
+  <property name="locale">
+   <locale language="Japanese" country="Japan"/>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>220</y>
+     <width>161</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+	background-color:rgb(85, 170, 255);
+	border-style:outset;
+	border-width:4px;
+	border-radius:15px;
+	padding:5px;
+	
+	font:  12pt &quot;Arial Black&quot;;
+}
+
+QPushButton:hover{
+	background-color:rgb(75, 151, 226);
+	border-color:rgb(182, 182, 182);
+	color:rgb(255, 255, 255);
+	
+}
+
+QPushButton:pressed{
+	background-color:rgb(47, 200, 255);
+	border-color:rgb(85, 170, 255);
+	border-style:inset;
+	color:rgb(255, 170, 0);
+	
+	font: italic 10pt &quot;MS Sans Serif&quot;;
+
+}</string>
+   </property>
+   <property name="text">
+    <string>システム起動する -|&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>230</y>
+     <width>191</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+	background-color:rgb(85, 170, 255);
+	border-style:outset;
+	border-width:4px;
+	border-radius:15px;
+	padding:5px;
+	
+	font: 10pt &quot;Arial Black&quot;;
+}
+
+QPushButton:hover{
+	background-color:rgb(75, 151, 226);
+	border-color:rgb(182, 182, 182);
+	color:rgb(255, 255, 255);
+	
+}
+
+QPushButton:pressed{
+	background-color:rgb(47, 200, 255);
+	border-color:rgb(85, 170, 255);
+	border-style:inset;
+	color:rgb(255, 170, 0);
+	
+	font: italic 15pt &quot;MS Sans Serif&quot;;
+
+}</string>
+   </property>
+   <property name="text">
+    <string>データベース</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>361</width>
+     <height>51</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
+   <property name="text">
+    <string>システムログ:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>80</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+	font: 8pt &quot;Yu Gothic UI Semilight&quot;;
+	background-image: url(:/image/UI/UI_Element/Button_TitleStyle.png);
+	background-color:transparent;
+	background-repeat: no-repeat;
+}
+QPushButton:hover{
+	background-position: 10px 0px;
+}
+QPushButton:pressed{
+	font-size:10pt;
+	font-style:oblique;
+	font-variant:small-caps;
+	border-bottom-left-radius:15px;
+	border-top-left-radius:15px;
+	border-style:inset;
+	background-color:#cccccccc
+}</string>
+   </property>
+   <property name="text">
+    <string>新規作成</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>40</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
+   <property name="text">
+    <string>データベース</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>70</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
+   <property name="text">
+    <string>ニックネーム</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../UIrc.qrc"/>
+ </resources>
+ <connections/>
+</ui>
