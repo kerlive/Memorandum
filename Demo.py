@@ -2,7 +2,7 @@ import os
 import sys
 
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore, QtGui, uic, QtNetwork
+from PyQt5 import QtCore, QtGui, QtNetwork, uic
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 import UIrc_rc
 
@@ -43,7 +43,6 @@ class Gui(base_1, form_1):
         self.pushButton_3.clicked.connect(self.EmptyCheck)
         self.pushButton_2.clicked.connect(self.select)
         self.pushButton.clicked.connect(self.checkin)
-
 
     def loadMain(self):
         self.main = Main()
@@ -236,17 +235,25 @@ class Main(base_2, form_2):
             self.label_12.setText("<span style=\" color: red;\">Error NO select</span>")
         else:
             if self.checkBox.isChecked() == False:
-                self.label_12.setText("<<span style=\" color: red;\">Error Check Box is Not correct.</span>")
+                self.label_12.setText("<span style=\" color: red;\">Error Check Box is Not correct.</span>")
             else:
-                text = self.listWidget_todo.currentItem()
-                print(text)
-                print("work")
+                text = "".join([str(x.text()) for x in self.listWidget_Alarm.selectedItems()])
+                Atarget = str(text.split()[-3]+" "+text.split()[-2]+" "+text.split()[-1])
+  
+                global conpath
+                db = conpath
+                cnn = sqlite3.connect(db)
+                c = cnn.cursor()
+                c.execute("UPDATE TODO SET Alarm = 'None' WHERE Alarm = '"+Atarget+"' ;")
+                cnn.commit()
+                cnn.close()
                 
-        
+                self.updateAlarm()
+   
 
     def watchdogAlarm(self):
         dgTimer = QtCore.QTimer(self)
-        dgTimer.start(10000)
+        dgTimer.start(15000)
         dgTimer.timeout.connect(self.catchAlarmTime)
         
     def catchAlarmTime(self):
@@ -258,26 +265,27 @@ class Main(base_2, form_2):
         cnn = sqlite3.connect(db)
         c = cnn.cursor()
 
-        c.execute("SELECT Alarm FROM TODO WHERE Alarm != 'None' ;")
+        c.execute("SELECT Alarm,Task FROM TODO WHERE Alarm != 'None' ;")
         alarm = c.fetchall()
         time = 2359
         if len(alarm) == 0:
-            self.label_12.setText("Today is No Alarm")
+            self.label_12.setText("Today is NO Alarm")
         else:
             for t in alarm:
                 fooAlarm = t
                 day = fooAlarm[0].split()
-
+                
+                if day[0].split('/')[1] < datetimeNow[0].split('/')[1] or day[0].split('/')[2] < datetimeNow[0].split('/')[2]:
+                    c.execute("UPDATE TODO SET Alarm = 'None' WHERE Task = "+str(fooAlarm[1])+";")
+                    cnn.commit()
                 if day == datetimeNow:
                     self.media_play()
-                   #c.execute("UPDATE TODO SET Alarm = 'None' WHERE Alarm = "+str(task)+";")
+                    c.execute("UPDATE TODO SET Alarm = 'None' WHERE Task = "+str(fooAlarm[1])+";")
+                    cnn.commit()
                 elif day[0] == datetimeNow[0] :
                     atime = min(time,int(day[1].replace(":","")))
                     if atime == int(day[1].replace(":","")):
                         self.label_12.setText("Next Alarm:"+day[1])
-                else:
-                    self.label_12.setText("Today is No Alarm")
-                
 
         cnn.close()
         self.updateAlarm()
@@ -836,13 +844,11 @@ class Main(base_2, form_2):
             self.hide()
         if reason == QSystemTrayIcon.Trigger:
             self.show()
-            
 class SingleApplication(QApplication):
     messageAvailable = QtCore.pyqtSignal(object)
 
     def __init__(self, argv, key):
         super().__init__(argv)
-
         QtCore.QSharedMemory(key).attach()
         self._memory = QtCore.QSharedMemory(self)
         self._memory.setKey(key)
@@ -896,7 +902,6 @@ class SingleApplicationWithMessaging(SingleApplication):
 if __name__ == '__main__':
 
     key = 'Memorandum'
-
 
     if len(sys.argv) > 1:
         app = SingleApplicationWithMessaging(sys.argv, key)
