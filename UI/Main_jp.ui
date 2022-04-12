@@ -26,15 +26,12 @@
       <height>511</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-    </property>
     <property name="currentIndex">
      <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>メイン</string>
+      <string>Main</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
@@ -62,7 +59,7 @@
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
-	font: 10pt &quot;Yu Gothic UI Semilight&quot;;
+	font: 8pt &quot;Yu Gothic UI Semilight&quot;;
 	background-image: url(:/image/UI/UI_Element/Button_TitleStyle.png);
 	background-color:transparent;
 	background-repeat: no-repeat;
@@ -141,11 +138,8 @@ QPushButton:pressed{
        </property>
        <property name="font">
         <font>
-         <family>MS Shell Dlg 2</family>
-         <pointsize>10</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
+         <family>MS PMincho</family>
+         <pointsize>26</pointsize>
         </font>
        </property>
        <property name="text">
@@ -173,11 +167,7 @@ QPushButton:pressed{
        </property>
        <property name="font">
         <font>
-         <family>MS Shell Dlg 2</family>
-         <pointsize>10</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
+         <pointsize>28</pointsize>
         </font>
        </property>
        <property name="text">
@@ -530,19 +520,6 @@ QPushButton:pressed{
         <string>Off</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="todoButton_Check">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>280</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Check</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="todoButton_Del">
        <property name="geometry">
         <rect>
@@ -590,6 +567,9 @@ QPushButton:pressed{
        <property name="currentRow">
         <number>-1</number>
        </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
       <widget class="QLabel" name="label_15">
        <property name="geometry">
@@ -603,6 +583,32 @@ QPushButton:pressed{
        <property name="text">
         <string>Trash Can</string>
        </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>280</y>
+         <width>158</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <widget class="QPushButton" name="todoButton_Check">
+          <property name="text">
+           <string>Check</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="todoButton_Weighup">
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QPlainTextEdit" name="plainTextEdit_todoMemo">
@@ -766,8 +772,8 @@ QPushButton:pressed{
         <rect>
          <x>200</x>
          <y>390</y>
-         <width>160</width>
-         <height>26</height>
+         <width>156</width>
+         <height>25</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -909,8 +915,8 @@ QPushButton:pressed{
        <rect>
         <x>40</x>
         <y>110</y>
-        <width>146</width>
-        <height>48</height>
+        <width>127</width>
+        <height>42</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1038,7 +1044,7 @@ QPushButton:pressed{
          <x>250</x>
          <y>50</y>
          <width>227</width>
-         <height>22</height>
+         <height>20</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -1159,7 +1165,7 @@ QPushButton:pressed{
         <x>30</x>
         <y>160</y>
         <width>321</width>
-        <height>26</height>
+        <height>23</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1221,11 +1227,8 @@ QPushButton:pressed{
              <widget class="QLabel" name="label_5">
               <property name="font">
                <font>
-                <family>MS Shell Dlg 2</family>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -1327,8 +1330,8 @@ QPushButton:pressed{
         <rect>
          <x>440</x>
          <y>310</y>
-         <width>195</width>
-         <height>26</height>
+         <width>191</width>
+         <height>25</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_7">

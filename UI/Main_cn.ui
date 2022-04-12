@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Time Management Master</string>
+   <string>时间管理大师</string>
   </property>
   <property name="locale">
    <locale language="Chinese" country="China"/>
@@ -167,18 +167,21 @@ QPushButton:pressed{
         <rect>
          <x>110</x>
          <y>60</y>
-         <width>201</width>
+         <width>181</width>
          <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <family>MS Shell Dlg 2</family>
-         <pointsize>10</pointsize>
-         <weight>50</weight>
+         <pointsize>16</pointsize>
+         <weight>9</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
        </property>
        <property name="text">
         <string>当地时间</string>
@@ -530,19 +533,6 @@ QPushButton:pressed{
         <string>取消</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="todoButton_Check">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>280</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Check</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="todoButton_Del">
        <property name="geometry">
         <rect>
@@ -590,6 +580,9 @@ QPushButton:pressed{
        <property name="currentRow">
         <number>-1</number>
        </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
       <widget class="QLabel" name="label_15">
        <property name="geometry">
@@ -603,6 +596,32 @@ QPushButton:pressed{
        <property name="text">
         <string>垃圾箱</string>
        </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>280</y>
+         <width>151</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <widget class="QPushButton" name="todoButton_Check">
+          <property name="text">
+           <string>确认</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="todoButton_Weighup">
+          <property name="text">
+           <string>提权</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QPlainTextEdit" name="plainTextEdit_todoMemo">
@@ -692,9 +711,9 @@ QPushButton:pressed{
      <widget class="QLabel" name="label_14">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>120</x>
         <y>180</y>
-        <width>141</width>
+        <width>171</width>
         <height>20</height>
        </rect>
       </property>

@@ -1,8 +1,15 @@
+#CODE BY KEVIN
+__author__ = "Kevin Chan"
+__copyright__ = "Copyright (C) 2022 Kevin"
+__license__ = "GPL-3.0"
+__version__ = "0.1.1"
+
+
 import os
 import sys
 
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore, QtGui, QtNetwork, uic
+from PyQt5 import QtCore, QtGui, uic
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 import UIrc_rc
 
@@ -13,7 +20,10 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser  # ver. < 3.0
 
-ui_path = os.path.dirname(os.path.abspath(__file__)) + "/UI"
+from multiprocessing import shared_memory
+
+ui_dir = os.path.dirname(os.path.abspath(__file__))
+ui_path = os.path.join(ui_dir,"UI")
 
 config = ConfigParser()
 config.read("Config.ini")
@@ -124,10 +134,15 @@ class Main(base_2, form_2):
         self.setupUi(self)
 
         self. setFixedSize(750,600)
-        self.setWindowIcon(QtGui.QIcon('./Main_Icon.ico'))
+        self.setWindowIcon(QtGui.QIcon(':/icon/UI/UI_Element/icon/Memorandum_ico.ico'))
         
+        self.setWindowFlags(QtCore.Qt.Dialog)
+
+        self.anotherCall()
+
         #Main
         self.label_name.setText("Hi " + self.Userdb() )
+        
 
         self.insertButton.clicked.connect(self.Insertdb)
 
@@ -150,13 +165,15 @@ class Main(base_2, form_2):
 
         #ToDo
         self.todoButton.setIcon(self.style().standardIcon(QStyle.SP_DialogOkButton))
-        self.todoButton_Check.setIcon(self.style().standardIcon(QStyle.SP_TitleBarUnshadeButton))
+        self.todoButton_Check.setIcon(self.style().standardIcon(QStyle.SP_DialogApplyButton))
+        self.todoButton_Weighup.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
         self.updateTodo()
         self.AlarmTimeMM()
         self.dial_Adays.valueChanged.connect(self.timeCharge)
         self.dial_Ahour.valueChanged.connect(self.timeCharge)
         self.todoButton_Check.clicked.connect(self.todoCheck)
         self.todoButton_Del.clicked.connect(self.listDel)
+        self.todoButton_Weighup.clicked.connect(self.todoWeighup)
 
         self.todoButton.clicked.connect(self.InsertTodo)
         self.lineEdit_Todo.returnPressed.connect(self.todoButton.click)
@@ -179,7 +196,6 @@ class Main(base_2, form_2):
         
 
         #Search_Output
-        #self.tableWidget.horizontalHeader().setSectionResizeMode(1)
         self.tableWidget.setHorizontalHeaderLabels(["Number","Year","Month","Day","Time","Memo"])
         sizelist_column = range(5)
         for nb in sizelist_column:
@@ -229,6 +245,19 @@ class Main(base_2, form_2):
         menu.addAction(quit)
 
         self.trayIcon.setContextMenu(menu)
+
+    def onTrayIconActivated(self, reason):
+        if reason == QSystemTrayIcon.DoubleClick:
+            self.hide()
+        if reason == QSystemTrayIcon.Trigger:
+            self.show()
+
+    def showhide(self,arg):
+        if arg == 0 :
+            return self.hide
+        if arg == 1 :
+            return self.show
+            
 
     def delAlarm(self):
         if self.listWidget_Alarm.currentRow() == -1:
@@ -422,6 +451,25 @@ class Main(base_2, form_2):
         self.label_8.setText("<span style=\" color: green;\">List Update...</span>")
         cnn.close()
 
+    def todoWeighup(self):
+        if self.listWidget_todo.currentRow() == -1:
+            self.label_8.setText("<span style=\" color: red;\">Error you need select ToDo task</span>")
+        else:
+            if self.listWidget_todo.currentRow() == 0:
+                self.label_8.setText("<span style=\" color: red;\">THE top ONE!</span>")
+            else:
+                global conpath
+                db = conpath
+                cnn = sqlite3.connect(db)
+                c = cnn.cursor()
+                ckid = str(self.listWidget_todo.currentRow() +1)
+                ckidup = str(self.listWidget_todo.currentRow())
+                c.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(str(99),ckid))
+                c.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(ckid,ckidup))
+                c.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(ckidup,str(99)))
+                cnn.commit()
+                cnn.close()
+                self.updateTodo()
 
     def todoCheck(self):
         if self.listWidget_todo.currentRow() == -1:
@@ -590,45 +638,6 @@ class Main(base_2, form_2):
             self.LapRow = 0
             self.label_10.setText("00:00.00")
             self.StopwatchStartButton.setEnabled(True)
-
-    def showhide(self,arg):
-        if arg == 0 :
-            return self.hide
-        if arg == 1 :
-            return self.show
-        
-
-    def LangChangeE(self):
-            if config.get('section_language','Language_val') == "English":
-                self.trayIcon.showMessage("Language NO Changed !","Engilsh")
-            else:
-                config.set('section_language','Language_val','English')
-                config.set('section_ui','Guide_val','Guide_en.ui')
-                config.set('section_ui','main_val','Main_en.ui')
-                with open('Config.ini','w') as configfile:
-                    config.write(configfile)
-                QMessageBox.information(None,"Language -> English","Language config is changed.\n"" You need reboot App...")
-    def LangChangeC(self):
-            if config.get('section_language','Language_val') == "Chinese":
-                self.trayIcon.showMessage("语言选项未改变！","中文")
-            else:
-                config.set('section_language','Language_val','Chinese')
-                config.set('section_ui','Guide_val','Guide_cn.ui')
-                config.set('section_ui','main_val','Main_cn.ui')
-                with open('Config.ini','w') as configfile:
-                    config.write(configfile)
-                QMessageBox.information(None,"语言 -> 中文","已改变换为中文注册文件\n"" 需要重新启动程序...")
-    def LangChangeJ(self):
-            if config.get('section_language','Language_val') == "Japanese":
-                self.trayIcon.showMessage("ランゲージ変わりませんてした。","日本語")
-            else:
-                config.set('section_language','Language_val','Japanese')
-                config.set('section_ui','Guide_val','Guide_jp.ui')
-                config.set('section_ui','main_val','Main_jp.ui')
-                with open('Config.ini','w') as configfile:
-                    config.write(configfile)
-                QMessageBox.information(None,"言語 -> 日本語","ランゲージ切り替えました。\n"" アプリ再起動が必要です...")     
-        
 
     def SB_range(self):
         maxid = self.Getdbrange()
@@ -839,87 +848,64 @@ class Main(base_2, form_2):
         conn.close
         self.label_7.setText("Memo Download from database #"+ Nb +">>")
 
-    def onTrayIconActivated(self, reason):
-        if reason == QSystemTrayIcon.DoubleClick:
-            self.hide()
-        if reason == QSystemTrayIcon.Trigger:
-            self.show()
-class SingleApplication(QApplication):
-    messageAvailable = QtCore.pyqtSignal(object)
 
-    def __init__(self, argv, key):
-        super().__init__(argv)
-        QtCore.QSharedMemory(key).attach()
-        self._memory = QtCore.QSharedMemory(self)
-        self._memory.setKey(key)
-        if self._memory.attach():
-            self._running = True
+    def LangChangeE(self):
+        if config.get('section_language','Language_val') == "English":
+            self.trayIcon.showMessage("Language NO Changed !","Engilsh")
         else:
-            self._running = False
-            if not self._memory.create(1):
-                raise RuntimeError(self._memory.errorString())
-
-    def isRunning(self):
-        return self._running
-
-class SingleApplicationWithMessaging(SingleApplication):
-    def __init__(self, argv, key):
-        super().__init__(argv, key)
-        self._key = key
-        self._timeout = 1000
-        self._server = QtNetwork.QLocalServer(self)
-        if not self.isRunning():
-            self._server.newConnection.connect(self.handleMessage)
-            self._server.listen(self._key)
-
-    def handleMessage(self):
-        socket = self._server.nextPendingConnection()
-        if socket.waitForReadyRead(self._timeout):
-            self.messageAvailable.emit(
-                socket.readAll().data().decode('utf-8'))
-            socket.disconnectFromServer()
+            config.set('section_language','Language_val','English')
+            config.set('section_ui','Guide_val','Guide_en.ui')
+            config.set('section_ui','main_val','Main_en.ui')
+            with open('Config.ini','w') as configfile:
+                config.write(configfile)
+            QMessageBox.information(None,"Language -> English","Language config is changed.\n"" You need reboot App...")
+    def LangChangeC(self):
+        if config.get('section_language','Language_val') == "Chinese":
+            self.trayIcon.showMessage("语言选项未改变！","中文")
         else:
-            QtCore.qDebug(socket.errorString())
+            config.set('section_language','Language_val','Chinese')
+            config.set('section_ui','Guide_val','Guide_cn.ui')
+            config.set('section_ui','main_val','Main_cn.ui')
+            with open('Config.ini','w') as configfile:
+                config.write(configfile)
+            QMessageBox.information(None,"语言 -> 中文","已改变换为中文注册文件\n"" 需要重新启动程序...")
+    def LangChangeJ(self):
+        if config.get('section_language','Language_val') == "Japanese":
+            self.trayIcon.showMessage("ランゲージ変わりませんてした。","日本語")
+        else:
+            config.set('section_language','Language_val','Japanese')
+            config.set('section_ui','Guide_val','Guide_jp.ui')
+            config.set('section_ui','main_val','Main_jp.ui')
+            with open('Config.ini','w') as configfile:
+                config.write(configfile)
+            QMessageBox.information(None,"言語 -> 日本語","ランゲージ切り替えました。\n"" アプリ再起動が必要です...")  
 
-    def sendMessage(self, message):
-        if self.isRunning():
-            socket = QtNetwork.QLocalSocket(self)
-            socket.connectToServer(self._key, QtCore.QIODevice.WriteOnly)
-            if not socket.waitForConnected(self._timeout):
-                print(socket.errorString())
-                return False
-            if not isinstance(message, bytes):
-                message = message.encode('utf-8')
-            socket.write(message)
-            if not socket.waitForBytesWritten(self._timeout):
-                print(socket.errorString())
-                return False
-            socket.disconnectFromServer()
-            return True
-        return False
+    def anotherCall(self):
+        cTimer = QtCore.QTimer(self)
+        cTimer.start(2000)
+        cTimer.timeout.connect(self.checkNew)
+    def checkNew(self):
+         if single.buf[0] == 0:
+             self.show()
+             single.buf[0] = 1       
 
 
 if __name__ == '__main__':
 
-    key = 'Memorandum'
+    key = "Memorandum"
 
-    if len(sys.argv) > 1:
-        app = SingleApplicationWithMessaging(sys.argv, key)
-        if app.isRunning():
-            print('app is already running')
-            app.sendMessage(' '.join(sys.argv[1:]))
-            sys.exit(1)
-    else:
-        app = SingleApplication(sys.argv, key)
-        if app.isRunning():
-            print('app is already running')
-            sys.exit(1)
+    try:
+        single = shared_memory.SharedMemory(key, create=False)
+        single.buf[0] = 0
+        sys.exit("App is runing")
+        
+    except:
+        single = shared_memory.SharedMemory(key, create=True,size=1)
+        single.buf[0] = 1
 
-    
-    demo = Gui()
-    demo.show()
-
-    
+        app = QApplication(sys.argv)
+        demo = Gui()
+        demo.show()
 
     try:
         sys.exit(app.exec_())
