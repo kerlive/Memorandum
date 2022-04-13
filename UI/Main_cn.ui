@@ -581,7 +581,7 @@ QPushButton:pressed{
         <number>-1</number>
        </property>
        <property name="sortingEnabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QLabel" name="label_15">
@@ -597,12 +597,12 @@ QPushButton:pressed{
         <string>垃圾箱</string>
        </property>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>180</x>
          <y>280</y>
-         <width>151</width>
+         <width>158</width>
          <height>26</height>
         </rect>
        </property>

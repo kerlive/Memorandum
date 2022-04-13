@@ -567,9 +567,6 @@ QPushButton:pressed{
        <property name="currentRow">
         <number>-1</number>
        </property>
-       <property name="sortingEnabled">
-        <bool>true</bool>
-       </property>
       </widget>
       <widget class="QLabel" name="label_15">
        <property name="geometry">
@@ -584,12 +581,12 @@ QPushButton:pressed{
         <string>Trash Can</string>
        </property>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>177</x>
          <y>280</y>
-         <width>158</width>
+         <width>161</width>
          <height>25</height>
         </rect>
        </property>
@@ -700,7 +697,7 @@ QPushButton:pressed{
        <rect>
         <x>140</x>
         <y>180</y>
-        <width>151</width>
+        <width>141</width>
         <height>20</height>
        </rect>
       </property>

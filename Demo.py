@@ -15,10 +15,8 @@ import UIrc_rc
 
 import sqlite3
 
-try:
-    from configparser import ConfigParser
-except ImportError:
-    from ConfigParser import ConfigParser  # ver. < 3.0
+
+from configparser import ConfigParser
 
 from multiprocessing import shared_memory
 
@@ -311,7 +309,7 @@ class Main(base_2, form_2):
                     self.media_play()
                     c.execute("UPDATE TODO SET Alarm = 'None' WHERE Task = "+str(fooAlarm[1])+";")
                     cnn.commit()
-                elif day[0] == datetimeNow[0] :
+                if day[0] == datetimeNow[0] :
                     atime = min(time,int(day[1].replace(":","")))
                     if atime == int(day[1].replace(":","")):
                         self.label_12.setText("Next Alarm:"+day[1])
@@ -431,7 +429,7 @@ class Main(base_2, form_2):
         cnn = sqlite3.connect(db)
         c = cnn.cursor()
         
-        ld = c.execute("SELECT Task,Title FROM TODO WHERE State = 'Live';")
+        ld = c.execute("SELECT Task,Title FROM TODO WHERE State = 'Live' ORDER BY Task;")
         for info in ld:
             hoge = info
             listText = str(hoge[0]) +'. ' + hoge[1]
@@ -460,15 +458,15 @@ class Main(base_2, form_2):
             else:
                 global conpath
                 db = conpath
-                cnn = sqlite3.connect(db)
-                c = cnn.cursor()
+                cnnrs = sqlite3.connect(db)
+                rs = cnnrs.cursor()
                 ckid = str(self.listWidget_todo.currentRow() +1)
                 ckidup = str(self.listWidget_todo.currentRow())
-                c.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(str(99),ckid))
-                c.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(ckid,ckidup))
-                c.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(ckidup,str(99)))
-                cnn.commit()
-                cnn.close()
+                rs.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(str(999),ckid))
+                rs.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(ckid,ckidup))
+                rs.execute("UPDATE TODO SET Task = ?  WHERE Task = ?;",(ckidup,str(999)))
+                cnnrs.commit()
+                cnnrs.close()
                 self.updateTodo()
 
     def todoCheck(self):
@@ -479,7 +477,7 @@ class Main(base_2, form_2):
             db = conpath
             cnn = sqlite3.connect(db)
             c = cnn.cursor()
-            c.execute("SELECT MIN(Task) FROM TODO;")
+            c.execute("SELECT Task FROM TODO ORDER BY Task;")
             fooid = c.fetchall()
             trashid = str(int(''.join(map(str,fooid[0]))) -1)
             ckid = str(self.listWidget_todo.currentRow() +1)
