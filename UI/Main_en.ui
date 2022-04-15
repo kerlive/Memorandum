@@ -485,35 +485,6 @@ QPushButton:pressed{
       <property name="title">
        <string>ToDo</string>
       </property>
-      <widget class="QRadioButton" name="radioButton_Done">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>280</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Done</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="radioButton_Off">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>280</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Off</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="todoButton_Del">
        <property name="geometry">
         <rect>
@@ -581,29 +552,61 @@ QPushButton:pressed{
         <string>Trash Can</string>
        </property>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>177</x>
+         <x>10</x>
          <y>280</y>
-         <width>161</width>
-         <height>25</height>
+         <width>331</width>
+         <height>27</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
         <item>
-         <widget class="QPushButton" name="todoButton_Check">
-          <property name="text">
-           <string>Check</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <widget class="QRadioButton" name="radioButton_Done">
+            <property name="text">
+             <string>Done</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_Off">
+            <property name="text">
+             <string>Off</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="todoButton_Weighup">
-          <property name="text">
-           <string>Weigh_Up</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QPushButton" name="todoButton_Check">
+            <property name="text">
+             <string>Check</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="todoButton_Weighup">
+            <property name="text">
+             <string>Weigh_Up</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="todoButton_Totop">
+            <property name="text">
+             <string>To_Top</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>

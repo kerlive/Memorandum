@@ -134,19 +134,22 @@ QPushButton:pressed{
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>120</y>
+         <y>140</y>
          <width>271</width>
-         <height>71</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <family>MS Shell Dlg 2</family>
-         <pointsize>10</pointsize>
-         <weight>50</weight>
+         <family>Noto Serif</family>
+         <pointsize>20</pointsize>
+         <weight>9</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 75 20pt &quot;Noto Serif&quot;;</string>
        </property>
        <property name="text">
         <string>你好</string>
@@ -504,35 +507,6 @@ QPushButton:pressed{
       <property name="title">
        <string>待定日志</string>
       </property>
-      <widget class="QRadioButton" name="radioButton_Done">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>280</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>完成</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="radioButton_Off">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>280</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>取消</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="todoButton_Del">
        <property name="geometry">
         <rect>
@@ -600,26 +574,58 @@ QPushButton:pressed{
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>10</x>
          <y>280</y>
-         <width>158</width>
-         <height>26</height>
+         <width>331</width>
+         <height>28</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
         <item>
-         <widget class="QPushButton" name="todoButton_Check">
-          <property name="text">
-           <string>确认</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <widget class="QRadioButton" name="radioButton_Done">
+            <property name="text">
+             <string>完成</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_Off">
+            <property name="text">
+             <string>取消</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="todoButton_Weighup">
-          <property name="text">
-           <string>提权</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QPushButton" name="todoButton_Check">
+            <property name="text">
+             <string>确认</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="todoButton_Weighup">
+            <property name="text">
+             <string>提权</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="todoButton_Totop">
+            <property name="text">
+             <string>排头</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -713,7 +719,7 @@ QPushButton:pressed{
        <rect>
         <x>120</x>
         <y>180</y>
-        <width>171</width>
+        <width>181</width>
         <height>20</height>
        </rect>
       </property>
@@ -904,7 +910,7 @@ QPushButton:pressed{
        </rect>
       </property>
       <property name="title">
-       <string/>
+       <string>铃声试听</string>
       </property>
       <widget class="QLabel" name="label_Music">
        <property name="geometry">

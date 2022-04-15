@@ -135,7 +135,7 @@ QPushButton:pressed{
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-	font: 8pt &quot;Yu Gothic UI Semilight&quot;;
+	font: 12pt &quot;Yu Gothic UI Semilight&quot;;
 	background-image: url(:/image/UI/UI_Element/Button_TitleStyle.png);
 	background-color:transparent;
 	background-repeat: no-repeat;

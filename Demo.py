@@ -19,6 +19,18 @@ import sqlite3
 from configparser import ConfigParser
 
 from multiprocessing import shared_memory
+key = "Memorandum"
+instance = 1
+try:
+    single = shared_memory.SharedMemory(key, create=False)
+    single.buf[0] = 0
+except:
+    instance = 0
+if instance == 0:
+    single = shared_memory.SharedMemory(key, create=True,size=1)
+    single.buf[0] = 1
+else:
+    sys.exit("App is runing")
 
 ui_dir = os.path.dirname(os.path.abspath(__file__))
 ui_path = os.path.join(ui_dir,"UI")
@@ -164,7 +176,8 @@ class Main(base_2, form_2):
         #ToDo
         self.todoButton.setIcon(self.style().standardIcon(QStyle.SP_DialogOkButton))
         self.todoButton_Check.setIcon(self.style().standardIcon(QStyle.SP_DialogApplyButton))
-        self.todoButton_Weighup.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
+        self.todoButton_Weighup.setIcon(self.style().standardIcon(QStyle.SP_BrowserReload))
+        self.todoButton_Totop.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
         self.updateTodo()
         self.AlarmTimeMM()
         self.dial_Adays.valueChanged.connect(self.timeCharge)
@@ -172,6 +185,7 @@ class Main(base_2, form_2):
         self.todoButton_Check.clicked.connect(self.todoCheck)
         self.todoButton_Del.clicked.connect(self.listDel)
         self.todoButton_Weighup.clicked.connect(self.todoWeighup)
+        self.todoButton_Totop.clicked.connect(self.todoPositiontop)
 
         self.todoButton.clicked.connect(self.InsertTodo)
         self.lineEdit_Todo.returnPressed.connect(self.todoButton.click)
@@ -448,6 +462,29 @@ class Main(base_2, form_2):
             self.listWidget_trash.addItem(iconV)
         self.label_8.setText("<span style=\" color: green;\">List Update...</span>")
         cnn.close()
+
+    def todoPositiontop(self):
+        if self.listWidget_todo.currentRow() == -1:
+            self.label_8.setText("<span style=\" color: red;\">Error you need select ToDo task</span>")
+        else:
+            if self.listWidget_todo.currentRow() == 0:
+                self.label_8.setText("<span style=\" color: red;\">THE top ONE!</span>")
+            else:
+                global conpath
+                db = conpath
+                cnnrs = sqlite3.connect(db)
+                rs = cnnrs.cursor()
+                ckid = str(self.listWidget_todo.currentRow() +1)
+                rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(str(999),ckid))
+                cnnrs.commit()
+
+                for nb in range(1,int(ckid)):
+                    print(nb)
+                    rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(change,nb))
+                rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(ckid,str(999)))
+                cnnrs.commit()
+                cnnrs.close()
+                self.updateTodo()
 
     def todoWeighup(self):
         if self.listWidget_todo.currentRow() == -1:
@@ -880,7 +917,7 @@ class Main(base_2, form_2):
 
     def anotherCall(self):
         cTimer = QtCore.QTimer(self)
-        cTimer.start(2000)
+        cTimer.start(1000)
         cTimer.timeout.connect(self.checkNew)
     def checkNew(self):
          if single.buf[0] == 0:
@@ -890,23 +927,11 @@ class Main(base_2, form_2):
 
 if __name__ == '__main__':
 
-    key = "Memorandum"
-
-    try:
-        single = shared_memory.SharedMemory(key, create=False)
-        single.buf[0] = 0
-        sys.exit("App is runing")
-        
-    except:
-        single = shared_memory.SharedMemory(key, create=True,size=1)
-        single.buf[0] = 1
-
-        app = QApplication(sys.argv)
-        demo = Gui()
-        demo.show()
+    app = QApplication(sys.argv)
+    demo = Gui()
+    demo.show()
 
     try:
         sys.exit(app.exec_())
-
     except SystemExit:
         print("Closing Window ...")
