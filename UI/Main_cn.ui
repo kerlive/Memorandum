@@ -81,7 +81,7 @@ QPushButton:pressed{
 }</string>
        </property>
        <property name="text">
-        <string>载入数据库</string>
+        <string>写入数据库</string>
        </property>
       </widget>
       <widget class="QTextEdit" name="Insert_Data">
@@ -575,9 +575,9 @@ QPushButton:pressed{
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>280</y>
+         <y>277</y>
          <width>331</width>
-         <height>28</height>
+         <height>31</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_15">
@@ -1437,7 +1437,7 @@ QPushButton:pressed{
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Quit</string>
+    <string>退出</string>
    </property>
   </action>
  </widget>

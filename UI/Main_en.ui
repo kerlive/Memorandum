@@ -96,7 +96,7 @@ QPushButton:pressed{
        </rect>
       </property>
       <property name="title">
-       <string>Data Output System LOG</string>
+       <string>Data Output -  System LOG</string>
       </property>
       <widget class="QTextBrowser" name="SystemOP_Browser">
        <property name="geometry">
@@ -457,7 +457,7 @@ QPushButton:pressed{
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>ToDo</string>
+       <string>Go ToDo</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_Memo">
@@ -483,7 +483,7 @@ QPushButton:pressed{
        </rect>
       </property>
       <property name="title">
-       <string>ToDo</string>
+       <string>ToDo Queue</string>
       </property>
       <widget class="QPushButton" name="todoButton_Del">
        <property name="geometry">
@@ -957,7 +957,7 @@ QPushButton:pressed{
        </rect>
       </property>
       <property name="title">
-       <string>Search MEMO</string>
+       <string>Search Control</string>
       </property>
       <widget class="QLabel" name="label_2">
        <property name="geometry">
