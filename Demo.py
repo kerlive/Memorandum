@@ -2,7 +2,7 @@
 __author__ = "Kevin Chan"
 __copyright__ = "Copyright (C) 2022 Kevin"
 __license__ = "GPL-3.0"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 
 import os
@@ -147,6 +147,7 @@ class Main(base_2, form_2):
         self.setWindowIcon(QtGui.QIcon(':/icon/UI/UI_Element/icon/Memorandum_ico.ico'))
         
         self.setWindowFlags(QtCore.Qt.Dialog)
+        self.setWhatsThis("Any you want to know in help.html")
 
         self.anotherCall()
 
@@ -215,6 +216,7 @@ class Main(base_2, form_2):
         self.tableWidget.horizontalHeader().setSectionResizeMode(5,QHeaderView.Stretch)
         
         self.Search_Button.clicked.connect(self.Searchdb)
+        self.Search_Button.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
         self.lineEdit.returnPressed.connect(self.Search_Button.click)
 
         self.TimeFilter()
@@ -257,6 +259,11 @@ class Main(base_2, form_2):
         menu.addAction(quit)
 
         self.trayIcon.setContextMenu(menu)
+
+    def event(self, event):
+        if event.type() == QtCore.QEvent.EnterWhatsThisMode:
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(os.getcwd()+"/Help/help.html"))
+        return super().event(event)
 
     def onTrayIconActivated(self, reason):
         if reason == QSystemTrayIcon.DoubleClick:
@@ -475,13 +482,16 @@ class Main(base_2, form_2):
                 cnnrs = sqlite3.connect(db)
                 rs = cnnrs.cursor()
                 ckid = str(self.listWidget_todo.currentRow() +1)
-                rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(str(999),ckid))
+                rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(str(9999),ckid))
                 cnnrs.commit()
-
+                
+                rsl = cnnrs.cursor()
+                dnb = int(ckid)
                 for nb in range(1,int(ckid)):
-                    print(nb)
-                    rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(change,nb))
-                rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(ckid,str(999)))
+                    dnb = dnb -1
+                    rsl.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(str(dnb+1),str(dnb)))
+                cnnrs.commit()
+                rs.execute("UPDATE TODO SET Task = ? WHERE Task = ?;",(1,str(9999)))
                 cnnrs.commit()
                 cnnrs.close()
                 self.updateTodo()
@@ -527,15 +537,14 @@ class Main(base_2, form_2):
                 cnn.commit()
             
             sort = cnn.cursor()
-            rs = sort.execute("SELECT Task FROM TODO WHERE Task > ?;",(ckid))
+            rs = sort.execute("SELECT Task FROM TODO WHERE Task > ? ORDER BY Task;",(ckid))
             for id in rs:
                 foo = id
                 fooid = str(''.join(map(str,foo)))
                 newid = str(int(''.join(map(str,foo))) - 1)
                 roder = "UPDATE TODO SET Task = "+ newid +" WHERE Task = "+ fooid+";"
                 c.execute(roder)
-           
-            cnn.commit()
+                cnn.commit()
             cnn.close()
 
             self.updateTodo()
