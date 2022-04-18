@@ -446,7 +446,7 @@ QPushButton:pressed{
         </rect>
        </property>
        <property name="text">
-        <string>Make Alarm Work</string>
+        <string>警告音をオンにする</string>
        </property>
       </widget>
      </widget>
@@ -560,7 +560,7 @@ QPushButton:pressed{
         </rect>
        </property>
        <property name="text">
-        <string>Trash Can</string>
+        <string>ゴミ箱</string>
        </property>
       </widget>
       <widget class="QWidget" name="layoutWidget">

@@ -51,7 +51,7 @@ connectdb = None
 global txtF
 txtF = None
 
-class Gui(base_1, form_1):
+class Guide(base_1, form_1):
     def __init__(self):
         super(base_1, self).__init__()
         self.setupUi(self)
@@ -140,7 +140,6 @@ class Gui(base_1, form_1):
 class Main(base_2, form_2):
     def __init__(self):
         super(base_2, self).__init__()
-
         self.setupUi(self)
 
         self. setFixedSize(750,600)
@@ -280,7 +279,7 @@ class Main(base_2, form_2):
 
     def delAlarm(self):
         if self.listWidget_Alarm.currentRow() == -1:
-            self.label_12.setText("<span style=\" color: red;\">Error NO select</span>")
+            self.label_12.setText("<span style=\" color: red;\">Error nothing selected!</span>")
         else:
             if self.checkBox.isChecked() == False:
                 self.label_12.setText("<span style=\" color: red;\">Error Check Box is Not correct.</span>")
@@ -301,7 +300,7 @@ class Main(base_2, form_2):
 
     def watchdogAlarm(self):
         dgTimer = QtCore.QTimer(self)
-        dgTimer.start(15000)
+        dgTimer.start(12000)
         dgTimer.timeout.connect(self.catchAlarmTime)
         
     def catchAlarmTime(self):
@@ -312,10 +311,11 @@ class Main(base_2, form_2):
         db = conpath
         cnn = sqlite3.connect(db)
         c = cnn.cursor()
+        m = cnn.cursor()
 
         c.execute("SELECT Alarm,Task FROM TODO WHERE Alarm != 'None' ;")
         alarm = c.fetchall()
-        time = 2359
+        atime = 2359
         if len(alarm) == 0:
             self.label_12.setText("Today is NO Alarm")
         else:
@@ -328,10 +328,14 @@ class Main(base_2, form_2):
                     cnn.commit()
                 if day == datetimeNow:
                     self.media_play()
+                    m.execute("SELECT Title FROM TODO WHERE Task = ?",str(fooAlarm[1]))
+                    tm = str(''.join(map(str,m.fetchall()[0])))
+                    self.trayIcon.showMessage(tm,"Click messagebox to Stop Alarm",20000)
+                    self.trayIcon.messageClicked.connect(self.player.stop)
                     c.execute("UPDATE TODO SET Alarm = 'None' WHERE Task = "+str(fooAlarm[1])+";")
                     cnn.commit()
                 if day[0] == datetimeNow[0] :
-                    atime = min(time,int(day[1].replace(":","")))
+                    atime = min(atime,int(day[1].replace(":","")))
                     if atime == int(day[1].replace(":","")):
                         self.label_12.setText("Next Alarm:"+day[1])
 
@@ -413,34 +417,37 @@ class Main(base_2, form_2):
         self.dateTimeEdit_Alarm.setDateTime(charge)
 
     def InsertTodo(self):
-        global conpath
-        db = conpath
-        conn = sqlite3.connect(db)
-        c = conn.cursor()
-        
-        c.execute("SELECT Task FROM TODO WHERE Task >= 0;")
-        fooid = c.fetchall()
-        taskid = int(''.join(map(str,fooid[-1])))+1
-
-        ToDo = self.lineEdit_Todo.text()
-        Alarm = self.dateTimeEdit_Alarm.dateTime().toString("yyyy/M/d HH:mm AP")
-        if self.checkBox_Alarm.isChecked() == True:
-            c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,Alarm,"Live"))
-            self.checkBox_Alarm.setChecked(False)
+        if self.lineEdit_Todo.text() == "":
+            self.label_8.setText("<span style=\" color: red;\">NO title input...</span>")
         else:
-            c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,"None","Live"))
-        conn.commit()
-        conn.close()
+            global conpath
+            db = conpath
+            conn = sqlite3.connect(db)
+            c = conn.cursor()
 
-        if self.checkBox_Memo.isChecked() == True:
-            TodoMemo = self.plainTextEdit_todoMemo.toPlainText()
-            self.Insert_Data.setPlainText("###This is ToDo Memo ###\n" + "*** Title ***\n"+ ToDo + "\n----------\n" + TodoMemo)
-            self.Insertdb()
-            self.checkBox_Memo.setChecked(False)
-        
-        self.lineEdit_Todo.clear()
-        self.plainTextEdit_todoMemo.clear()
-        self.updateTodo()
+            c.execute("SELECT Task FROM TODO WHERE Task >= 0;")
+            fooid = c.fetchall()
+            taskid = int(''.join(map(str,fooid[-1])))+1
+
+            ToDo = self.lineEdit_Todo.text()
+            Alarm = self.dateTimeEdit_Alarm.dateTime().toString("yyyy/M/d HH:mm AP")
+            if self.checkBox_Alarm.isChecked() == True:
+                c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,Alarm,"Live"))
+                self.checkBox_Alarm.setChecked(False)
+            else:
+                c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,"None","Live"))
+            conn.commit()
+            conn.close()
+
+            if self.checkBox_Memo.isChecked() == True:
+                TodoMemo = self.plainTextEdit_todoMemo.toPlainText()
+                self.Insert_Data.setPlainText("###This is ToDo Memo ###\n" + "*** Title ***\n"+ ToDo + "\n----------\n" + TodoMemo)
+                self.Insertdb()
+                self.checkBox_Memo.setChecked(False)
+
+            self.lineEdit_Todo.clear()
+            self.plainTextEdit_todoMemo.clear()
+            self.updateTodo()
     
     def updateTodo(self):
         self.listWidget_todo.clear()
@@ -937,7 +944,7 @@ class Main(base_2, form_2):
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
-    demo = Gui()
+    demo = Guide()
     demo.show()
 
     try:
