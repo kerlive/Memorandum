@@ -568,7 +568,7 @@ QPushButton:pressed{
         <rect>
          <x>10</x>
          <y>280</y>
-         <width>348</width>
+         <width>353</width>
          <height>28</height>
         </rect>
        </property>
@@ -578,7 +578,7 @@ QPushButton:pressed{
           <item>
            <widget class="QRadioButton" name="radioButton_Done">
             <property name="text">
-             <string>Done</string>
+             <string>完成</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -588,7 +588,7 @@ QPushButton:pressed{
           <item>
            <widget class="QRadioButton" name="radioButton_Off">
             <property name="text">
-             <string>Off</string>
+             <string>廃棄</string>
             </property>
            </widget>
           </item>
@@ -599,7 +599,7 @@ QPushButton:pressed{
           <item>
            <widget class="QPushButton" name="todoButton_Check">
             <property name="text">
-             <string>確認</string>
+             <string>終える</string>
             </property>
            </widget>
           </item>
@@ -1264,7 +1264,7 @@ QPushButton:pressed{
             <item>
              <widget class="QPushButton" name="Download_Data">
               <property name="text">
-               <string>記入する</string>
+               <string>テータアクセス</string>
               </property>
              </widget>
             </item>
