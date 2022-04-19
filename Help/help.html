@@ -12,20 +12,33 @@
   body {
   font-family: Arial, sans-serif;
 }
+
 .main {
-    background-color:rgba(40, 93, 148, 0.05);
+    background-color:rgba(43, 126, 186, 0.05);
     border-radius: 15px;
+    height:100%;
+    width:80%;
+    float:left;
+}
+.content {
+  display: block;
+  height:100%;
+  width:200px;
+  float:left;
+  background-color:rgba(33, 97, 118, 0.25);
+  border-radius: 15px;
+  border: 5px solid lightblue;
 }
 .topic {
   overflow: hidden;
   background-color: #333;
   border-radius: 5px;
 }
-div.b2top {
+div.bottonControl {
   position: fixed;
   bottom: 0;
   right: 0;
-  width: 200px;
+  width: 120px;
   border: 3px solid gray;
   border-radius: 5px;
 }
@@ -49,7 +62,7 @@ div.b2top {
   </head>
 <html lang="en">
   <head>
-    <title>There is a Help doc</title>
+    <title>Here is a Help doc</title>
   </head>
   <body>
     <div class="topic">
@@ -63,18 +76,39 @@ div.b2top {
     <h2>Memorandum Help document</h2>
     <p>version 0.1.2</p>
   </div>
+
+  <div id="MyContent" class="content">
+    <p>Here is content space</p>
+    <a href="#">Link1</a>
+    <a href="#">link2</a>
+  </div>
   
 
-  <div class="body">
+  <div id="MyMain" class="main">
 
    
-  </div>
-    <div class="b2top">
-    <a href="#top">Back to top of page ----||</a>
-    </div>
+    <div class="bottonControl">
+      <button onClick="location.href='#Top'" type="button">Back to top of page</button>
+      <button id= "ShowButton" onclick="contrentControl()">Hide Content</button>
+      </div>
+    <script>
+  function contrentControl() {
+  var custDiv = document.getElementById("MyContent");
+  var custDiv2 = document.getElementById("MyMain")
+  if (custDiv.style.display === "none") {
+  custDiv.style.display = "block";
+  custDiv2.style.width = "80%";
+  document.querySelector('#ShowButton').innerText = 'Hide Content';
+  } 
+  else{
+  custDiv.style.display = "none";
+  custDiv2.style.width = "100%";
+  document.querySelector('#ShowButton').innerText = 'Show Content';
+  }
+  }
 
-  <script>
-    !function(){
+
+!function(){
     function n(n,e,t){
         return n.getAttribute(e)||t
 }
