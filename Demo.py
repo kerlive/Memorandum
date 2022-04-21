@@ -46,7 +46,7 @@ form_2, base_2 = uic.loadUiType(os.path.join(ui_path,ui_2))
 
 global connectdb
 global conpath
-connectdb = None
+connectdb = 0
 
 global txtF
 txtF = None
@@ -65,8 +65,8 @@ class Guide(base_1, form_1):
         self.pushButton.clicked.connect(self.checkin)
 
     def loadMain(self):
-        self.main = Main()
-        self.main.show()
+        self.mainWindow = Main()
+        self.mainWindow.show()
         self.close()
 
     def NoDBError(self):
