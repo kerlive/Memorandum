@@ -805,7 +805,7 @@ class Main(base_2, form_2):
     def PasteText(self):
         global txtF
 
-        if txtF == None:
+        if txtF == None or txtF == '':
             Error = QMessageBox.warning(
             self,
             "Oh dear!",
