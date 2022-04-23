@@ -505,7 +505,7 @@ QPushButton:pressed{
        </rect>
       </property>
       <property name="title">
-       <string>待定日志</string>
+       <string>预定事项</string>
       </property>
       <widget class="QPushButton" name="todoButton_Del">
        <property name="geometry">
@@ -711,7 +711,7 @@ QPushButton:pressed{
        </rect>
       </property>
       <property name="text">
-       <string>年/月/日 时:分 AP</string>
+       <string>年/月/日 时:分 </string>
       </property>
      </widget>
      <widget class="QLabel" name="label_14">
