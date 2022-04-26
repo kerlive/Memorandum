@@ -1021,7 +1021,11 @@ QPushButton:pressed{
          <widget class="QComboBox" name="comboBox_3"/>
         </item>
         <item>
-         <widget class="QTimeEdit" name="timeEdit"/>
+         <widget class="QTimeEdit" name="timeEdit">
+          <property name="displayFormat">
+           <string>HH:mm AP</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1068,22 +1072,25 @@ QPushButton:pressed{
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QRadioButton" name="radioButton">
+         <widget class="QRadioButton" name="dayfilterButton">
           <property name="text">
-           <string>日期筛选</string>
+           <string>以日期筛选</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_2">
+         <widget class="QRadioButton" name="timefilterButton">
           <property name="text">
-           <string>细分时间筛选</string>
+           <string>以时间筛选</string>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="filterButton">
        <property name="geometry">
         <rect>
          <x>510</x>

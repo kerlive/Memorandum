@@ -2,7 +2,7 @@
 __author__ = "Kevin Chan"
 __copyright__ = "Copyright (C) 2022 Kevin"
 __license__ = "GPL-3.0"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 
 import os
@@ -208,6 +208,7 @@ class Main(base_2, form_2):
         
 
         #Search_Output
+        self.filterButton.setEnabled(False)
         self.tableWidget.setHorizontalHeaderLabels(["Number","Year","Month","Day","Time","Memo"])
         sizelist_column = range(5)
         for nb in sizelist_column:
@@ -217,8 +218,10 @@ class Main(base_2, form_2):
         self.Search_Button.clicked.connect(self.Searchdb)
         self.Search_Button.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
         self.lineEdit.returnPressed.connect(self.Search_Button.click)
+        self.filterButton.clicked.connect(self.tableFilter)
 
         self.TimeFilter()
+        self.comboBox_2.currentIndexChanged.connect(self.comboDay)
 
         #Info_Editor
         self.spinBox.valueChanged.connect(self.SB_range)
@@ -344,7 +347,7 @@ class Main(base_2, form_2):
 
 
     def musicUpdate(self):
-        music_path = os.path.dirname(os.path.abspath(__file__)) + "/Music"
+        music_path = os.path.dirname(os.path.abspath(__name__)) + "/Music"
         dir_list = os.listdir(music_path)
         for m in dir_list:
             self.listWidget_Music.addItem(m)
@@ -362,7 +365,7 @@ class Main(base_2, form_2):
             if self.listWidget_Music.currentRow() == -1:
                 self.listWidget_Music.setCurrentRow(1)
             name = self.listWidget_Music.currentItem().text()
-            alarm_path =  os.path.dirname(os.path.abspath(__file__)) + "/Music/" + name
+            alarm_path =  os.path.dirname(os.path.abspath(__name__)) + "/Music/" + name
             url = QtCore.QUrl.fromLocalFile(alarm_path)
             conten = QMediaContent(url)
             self.player.setMedia(conten)
@@ -757,6 +760,7 @@ class Main(base_2, form_2):
             self.label_6.setText("<span style=\" color: Green;\">Search Done!</span>")
 
         conn.close()
+        self.filterButton.setEnabled(True)
 
     
     def TimeFilter(self):
@@ -776,11 +780,58 @@ class Main(base_2, form_2):
         for m in range(1,13):
             mon = str(m)
             self.comboBox_2.addItem(mon)
-        bm = [1,3,5,7,8]
-        
         for d in range(1,32):
             da = str(d)
             self.comboBox_3.addItem(da)
+
+    def comboDay(self):
+        years = int(self.comboBox.currentText())
+        month = int(self.comboBox_2.currentText())
+        self.comboBox_3.clear()
+        if month == 2:
+            if years % 4 == 0 or years % 100 == 0 or years % 400 == 0:
+                for d in range(1,30):
+                    da = str(d)
+                    self.comboBox_3.addItem(da)
+            else:
+                for d in range(1,29):
+                    da = str(d)
+                    self.comboBox_3.addItem(da)
+        else:
+            bm = [1,3,5,7,8,10,12]
+            for rg,mo in enumerate(bm):
+                if month == mo: 
+                    for d in range(1,32):
+                        da = str(d)
+                        self.comboBox_3.addItem(da)
+            sm = [4,6,9,11]
+            for rg,mo in enumerate(sm):
+                if month == mo:
+                    for d in range(1,31):
+                        da = str(d)
+                        self.comboBox_3.addItem(da)
+
+    def tableFilter(self):
+        if self.dayfilterButton.isChecked() == True:
+            year = self.comboBox.currentText()
+            month = self.comboBox_2.currentText()
+            day = self.comboBox_3.currentText()
+            for i in range(self.tableWidget.rowCount()):
+                match = False
+                item_year = self.tableWidget.item(i,1)
+                item_month = self.tableWidget.item(i,2)
+                item_day = self.tableWidget.item(i,3)
+                if item_year.text() == year and item_month.text() == month and item_day.text() == day:
+                        match = True
+                self.tableWidget.setRowHidden(i, not match)
+        else:
+            time = self.timeEdit.time().toString('hh:mm')
+            for i in range(self.tableWidget.rowCount()):
+                match = False
+                item_time = self.tableWidget.item(i,4)
+                if item_time.text() == time:
+                    match = True
+                self.tableWidget.setRowHidden(i, not match)
 
 
     def Getdbrange(self):
@@ -887,17 +938,20 @@ class Main(base_2, form_2):
         self.label_time_2.setText(t)
 
     def Download_db(self,arg):
-        self.plainTextEdit.clear()
-        global conpath
-        db = conpath
-        conn = sqlite3.connect(db)
-        c = conn.cursor()
-        Nb = str(self.spinBox.value())
-        md = c.execute("SELECT Memo FROM MEMORANDUM WHERE ID = ?;",(Nb,))
-        MemEd = self.strcover(md)
-        self.plainTextEdit.appendPlainText(MemEd)
-        conn.close
-        self.label_7.setText("Memo Download from database #"+ Nb +">>")
+        try:
+            self.plainTextEdit.clear()
+            global conpath
+            db = conpath
+            conn = sqlite3.connect(db)
+            c = conn.cursor()
+            Nb = str(self.spinBox.value())
+            md = c.execute("SELECT Memo FROM MEMORANDUM WHERE ID = ?;",(Nb,))
+            MemEd = self.strcover(md)
+            self.plainTextEdit.appendPlainText(MemEd)
+            conn.close
+            self.label_7.setText("Memo Download from database #"+ Nb +">>")
+        except:
+            self.trayIcon.showMessage("Error!!!","System Can Not download memo.")
 
 
     def LangChangeE(self):

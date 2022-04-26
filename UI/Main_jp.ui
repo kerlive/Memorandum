@@ -1016,7 +1016,11 @@ QPushButton:pressed{
          <widget class="QComboBox" name="comboBox_3"/>
         </item>
         <item>
-         <widget class="QTimeEdit" name="timeEdit"/>
+         <widget class="QTimeEdit" name="timeEdit">
+          <property name="displayFormat">
+           <string>HH:mm AP</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1055,30 +1059,33 @@ QPushButton:pressed{
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>250</x>
+         <x>230</x>
          <y>50</y>
-         <width>227</width>
+         <width>255</width>
          <height>22</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QRadioButton" name="radioButton">
+         <widget class="QRadioButton" name="dayfilterButton">
           <property name="text">
-           <string>日にちを濾す</string>
+           <string>日にちで結果を濾す</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_2">
+         <widget class="QRadioButton" name="timefilterButton">
           <property name="text">
-           <string>時間まてまも</string>
+           <string>時間で結果を濾す</string>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="filterButton">
        <property name="geometry">
         <rect>
          <x>510</x>
