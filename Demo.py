@@ -153,10 +153,10 @@ class Main(base_2, form_2):
         #Main
         self.label_name.setText("Hi " + self.Userdb() )
         
-
         self.insertButton.clicked.connect(self.Insertdb)
 
         #SystemTimeshow
+        self.Zone()
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.Timeshow)
         timer.start(1000)
@@ -932,9 +932,34 @@ class Main(base_2, form_2):
             time = curent_time
         return time
 
+    def Zone(self):
+        zone = ['UTC','Local','Tokyo','Los Angeles','Melbourne','Singapore','Berlin']
+        for n,z in enumerate(zone):
+            self.comboBox_4.addItem(z)
+    def worldClock(self):
+        UTC =  QtCore.QDateTime.currentDateTimeUtc()
+        sl = self.comboBox_4.currentText()
+        if sl == 'UTC':
+            return UTC.toString('hh:mm:ss')
+        if sl == 'Local':
+            return UTC.toLocalTime().toString('hh:mm:ss')
+        if sl == 'Tokyo':
+            return UTC.addSecs(3600*9).toString('hh:mm:ss')
+        if sl == 'Los Angeles':
+            return UTC.addSecs(3600*-7).toString('hh:mm:ss')
+        if sl == 'Melbourne':
+            return UTC.addSecs(3600*10).toString('hh:mm:ss')
+        if sl == 'Singapore':
+            return UTC.addSecs(3600*8).toString('hh:mm:ss')
+        if sl == 'Berlin':
+            return UTC.addSecs(3600*2).toString('hh:mm:ss')
+
+
     def Timeshow(self):
         t = self.Timeget(1)
-        self.label_time.setText(t)
+        wc = self.worldClock()
+        
+        self.label_time.setText(wc)
         self.label_time_2.setText(t)
 
     def Download_db(self,arg):
