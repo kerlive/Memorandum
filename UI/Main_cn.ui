@@ -176,15 +176,15 @@ QPushButton:pressed{
        </property>
        <property name="font">
         <font>
-         <family>MS Shell Dlg 2</family>
-         <pointsize>16</pointsize>
+         <family>Alef</family>
+         <pointsize>26</pointsize>
          <weight>9</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
+        <string notr="true">font: 75 26pt &quot;Alef&quot;;</string>
        </property>
        <property name="text">
         <string>当地时间</string>
@@ -195,7 +195,7 @@ QPushButton:pressed{
         <rect>
          <x>20</x>
          <y>70</y>
-         <width>69</width>
+         <width>71</width>
          <height>22</height>
         </rect>
        </property>

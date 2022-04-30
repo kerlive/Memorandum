@@ -57,7 +57,7 @@ class Guide(base_1, form_1):
         self.setupUi(self)
 
         self.setWindowIcon(QtGui.QIcon(':/icon/UI/UI_Element/icon/guide.png'))
-        
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.setFixedSize(400,300)
 
         self.pushButton_3.clicked.connect(self.EmptyCheck)
@@ -428,7 +428,7 @@ class Main(base_2, form_2):
             conn = sqlite3.connect(db)
             c = conn.cursor()
 
-            c.execute("SELECT Task FROM TODO WHERE Task >= 0;")
+            c.execute("SELECT Task FROM TODO WHERE Task >= 0 ORDER BY Task;")
             fooid = c.fetchall()
             taskid = int(''.join(map(str,fooid[-1])))+1
 
