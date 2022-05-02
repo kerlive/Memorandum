@@ -149,6 +149,8 @@ class Main(base_2, form_2):
         self.setWhatsThis("Any you want to know in help.html")
 
         self.anotherCall()
+        #About
+        self.actionAbout.triggered.connect(self.about)
 
         #Main
         self.label_name.setText("Hi " + self.Userdb() )
@@ -261,6 +263,15 @@ class Main(base_2, form_2):
         menu.addAction(quit)
 
         self.trayIcon.setContextMenu(menu)
+
+    def about(self):
+        About = QMessageBox.information(
+            self,
+            "About Memorandum Lite",
+            "Memorandum Lite is a free opensource software \n programmed in Python3, based on PyQt5.\n Copyright (c) 2022 Kevin\n Author: Kevin Chan(E) 陈作乾（中） ケン　チェー（日） https://github.com/kerlive/\n License:GPL-3.0\n Version:0.1.3\n",
+            buttons=QMessageBox.Yes ,
+            defaultButton=QMessageBox.Yes,
+        )
 
     def event(self, event):
         if event.type() == QtCore.QEvent.EnterWhatsThisMode:

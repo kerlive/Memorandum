@@ -1422,6 +1422,8 @@ QPushButton:pressed{
      <string>程序</string>
     </property>
     <addaction name="actionQuit"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuTool_Bar"/>
    <addaction name="menuSystem"/>
@@ -1445,6 +1447,11 @@ QPushButton:pressed{
   <action name="actionQuit">
    <property name="text">
     <string>退出</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>关于</string>
    </property>
   </action>
  </widget>

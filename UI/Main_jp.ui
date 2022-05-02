@@ -1415,6 +1415,8 @@ QPushButton:pressed{
      <string>アプリ</string>
     </property>
     <addaction name="actionQuit"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuTool_Bar"/>
    <addaction name="menuSystem"/>
@@ -1438,6 +1440,11 @@ QPushButton:pressed{
   <action name="actionQuit">
    <property name="text">
     <string>閉じる</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>アプリについて</string>
    </property>
   </action>
  </widget>

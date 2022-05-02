@@ -1,8 +1,8 @@
-xxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxx
+###INFORMATION###
 
+Memorandum Lite is a free opensource software programmed in Python3, based on PyQt5.
 
-information
+Copyright (c) 2022 Kevin
+Author: Kevin Chan(E) 陈作乾（中） ケン　チェー（日） https://github.com/kerlive/
+License:GPL-3.0
+Version:0.1.3
