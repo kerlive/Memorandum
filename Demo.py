@@ -2,8 +2,7 @@
 __author__ = "Kevin Chan"
 __copyright__ = "Copyright (C) 2022 Kevin"
 __license__ = "GPL-3.0"
-__version__ = "0.1.3"
-
+__version__ = "0.1.4"
 
 import os
 import sys
@@ -50,6 +49,113 @@ connectdb = 0
 
 global txtF
 txtF = None
+
+class analogWClock(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.update)
+        timer.start(1000)
+        
+        self.local = 0
+
+        self.hPointer = QtGui.QPolygon([QtCore.QPoint(6, 7),
+										QtCore.QPoint(-6, 7),
+										QtCore.QPoint(0, -50)])
+
+        self.mPointer = QtGui.QPolygon([QtCore.QPoint(6, 7),
+								QtCore.QPoint(-6, 7),
+								QtCore.QPoint(0, -90)])
+
+        self.sPointer = QtGui.QPolygon([QtCore.QPoint(1, 1),
+								QtCore.QPoint(-1, 1),
+								QtCore.QPoint(0, -100)])
+
+        self.bColor = QtGui.QColor(0,128,255,110)
+        self.sColor = QtGui.QColor(246, 107, 14, 107)
+        self.mColor = QtGui.QColor(184,134,11,211)
+
+    def updateClock(self, location):
+        
+        UTC =  QtCore.QDateTime.currentDateTimeUtc()
+        sl = location
+        if sl == 'UTC':
+            self.local = 1
+        if sl == 'Local':
+            self.local = 0
+        if sl == 'Tokyo':
+            self.local = 2
+        if sl == 'Los Angeles':
+            self.local = 3
+        if sl == 'Melbourne':
+            self.local = 4
+        if sl == 'Singapore':
+            self.local = 5
+        if sl == 'Berlin':
+            self.local = 6
+
+    def time4draw(self):
+        if self.local == 1:
+            return QtCore.QDateTime.currentDateTimeUtc()
+        if self.local == 0:
+            return QtCore.QDateTime.currentDateTime()
+        if self.local == 2:
+            return QtCore.QDateTime.currentDateTimeUtc().addSecs(3600*9)
+        if self.local == 3:
+            return QtCore.QDateTime.currentDateTimeUtc().addSecs(3600*-7)
+        if self.local == 4:
+            return QtCore.QDateTime.currentDateTimeUtc().addSecs(3600*10)
+        if self.local == 5:
+            return QtCore.QDateTime.currentDateTimeUtc().addSecs(3600*8)
+        if self.local == 6:
+            return QtCore.QDateTime.currentDateTimeUtc().addSecs(3600*2)
+
+    def paintEvent(self, event):
+
+        rec = min(self.width(), self.height())
+
+
+        tik = self.time4draw().time()
+
+        qp = QtGui.QPainter(self)
+        timeView = self.time4draw().toString("\n d MMMM \n hh:mm:ss \n ddd")
+        qp.setPen(QtGui.QPen(QtCore.Qt.black))
+        qp.setFont(QtGui.QFont("Alef", 22))
+        qp.drawText(event.rect(),QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,timeView)
+
+        painter = QtGui.QPainter(self)
+
+        def drawPointer(color, rotation, pointer):
+
+            painter.setBrush(QtGui.QBrush(color))
+            painter.save()
+            painter.rotate(rotation)
+            painter.drawConvexPolygon(pointer)
+            painter.restore()
+
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
+
+        painter.translate(self.width() / 2, self.height() / 2)
+
+        painter.scale(rec / 200, rec / 200)
+
+        painter.setPen(QtCore.Qt.NoPen)
+
+        drawPointer(self.bColor, (30 * (tik.hour() + tik.minute() / 60)), self.hPointer)
+        drawPointer(self.bColor, (6 * (tik.minute() + tik.second() / 60)), self.mPointer)
+        drawPointer(self.sColor, (6 * tik.second()), self.sPointer)
+
+
+        painter.setPen(QtGui.QPen(self.mColor))
+
+        for i in range(0, 60):
+            painter.drawLine(89,0,99,0)
+            if (i % 5) == 0:
+                painter.drawLine(77, 0, 97, 0)
+            painter.rotate(6)
+        painter.drawEllipse(-100, -100, 200, 200)
+        painter.end()
 
 class Guide(base_1, form_1):
     def __init__(self):
@@ -149,11 +255,19 @@ class Main(base_2, form_2):
         self.setWhatsThis("Any you want to know in help.html")
 
         self.anotherCall()
+
         #About
         self.actionAbout.triggered.connect(self.about)
 
         #Main
-        self.label_name.setText("Hi " + self.Userdb() )
+        self.widget_clock = analogWClock()
+        layout = QGridLayout(self.widget)
+        layout.addWidget(self.widget_clock)
+
+        self.comboBox_4.currentIndexChanged.connect(self.worldClock)
+        
+
+        self.label_name.setText(self.Userdb())
         
         self.insertButton.clicked.connect(self.Insertdb)
 
@@ -268,7 +382,7 @@ class Main(base_2, form_2):
         About = QMessageBox.information(
             self,
             "About Memorandum Lite",
-            "Memorandum Lite is a free opensource software \n programmed in Python3, based on PyQt5.\n Copyright (c) 2022 Kevin\n Author: Kevin Chan(E) 陈作乾（中） ケン　チェー（日） https://github.com/kerlive/\n License:GPL-3.0\n Version:0.1.3\n",
+            "Memorandum Lite is a free opensource software \n programmed in Python3, based on PyQt5.\n Copyright (c) 2022 Kevin\n Author: Kevin Chan(E) 陈作乾（中） ケン　チェー（日） https://github.com/kerlive/\n License:GPL-3.0\n Version:0.1.4\n",
             buttons=QMessageBox.Yes ,
             defaultButton=QMessageBox.Yes,
         )
@@ -947,30 +1061,14 @@ class Main(base_2, form_2):
         zone = ['UTC','Local','Tokyo','Los Angeles','Melbourne','Singapore','Berlin']
         for n,z in enumerate(zone):
             self.comboBox_4.addItem(z)
+
     def worldClock(self):
-        UTC =  QtCore.QDateTime.currentDateTimeUtc()
         sl = self.comboBox_4.currentText()
-        if sl == 'UTC':
-            return UTC.toString('hh:mm:ss')
-        if sl == 'Local':
-            return UTC.toLocalTime().toString('hh:mm:ss')
-        if sl == 'Tokyo':
-            return UTC.addSecs(3600*9).toString('hh:mm:ss')
-        if sl == 'Los Angeles':
-            return UTC.addSecs(3600*-7).toString('hh:mm:ss')
-        if sl == 'Melbourne':
-            return UTC.addSecs(3600*10).toString('hh:mm:ss')
-        if sl == 'Singapore':
-            return UTC.addSecs(3600*8).toString('hh:mm:ss')
-        if sl == 'Berlin':
-            return UTC.addSecs(3600*2).toString('hh:mm:ss')
+        self.widget_clock.updateClock(sl)
 
 
     def Timeshow(self):
         t = self.Timeget(1)
-        wc = self.worldClock()
-        
-        self.label_time.setText(wc)
         self.label_time_2.setText(t)
 
     def Download_db(self,arg):

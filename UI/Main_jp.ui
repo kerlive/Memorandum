@@ -135,20 +135,20 @@ QPushButton:pressed{
       <widget class="QLabel" name="label_name">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>120</y>
-         <width>271</width>
-         <height>71</height>
+         <x>210</x>
+         <y>180</y>
+         <width>111</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <family>MS PMincho</family>
-         <pointsize>26</pointsize>
+         <pointsize>22</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>こにちは</string>
+        <string>ユーザー</string>
        </property>
       </widget>
       <widget class="QCalendarWidget" name="calendarWidget">
@@ -157,38 +157,52 @@ QPushButton:pressed{
          <x>20</x>
          <y>220</y>
          <width>281</width>
-         <height>191</height>
+         <height>201</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(17, 176, 208);
+color: qlineargradient(spread:pad, x1:0.159045, y1:0.614, x2:1, y2:0, stop:0.409091 rgba(85, 255, 255, 232), stop:1 rgba(85, 170, 255, 255));</string>
+       </property>
       </widget>
-      <widget class="QLabel" name="label_time">
+      <widget class="QLabel" name="label_hi">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>60</y>
-         <width>201</width>
+         <x>210</x>
+         <y>130</y>
+         <width>111</width>
          <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>28</pointsize>
+         <pointsize>20</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>ローカル</string>
+        <string>こんにちは</string>
        </property>
       </widget>
       <widget class="QComboBox" name="comboBox_4">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>70</y>
+         <x>240</x>
+         <y>0</y>
          <width>69</width>
          <height>22</height>
         </rect>
        </property>
       </widget>
+     </widget>
+     <widget class="QWidget" name="widget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>30</y>
+        <width>200</width>
+        <height>200</height>
+       </rect>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_6">
@@ -293,6 +307,19 @@ QPushButton:pressed{
          <width>118</width>
          <height>23</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QProgressBar{
+	background-color:rgb(85, 170, 255);
+	color:rgb(255, 170, 127);
+	border-style:none;
+	border-radius:3px;
+	text-align:center;
+}
+QProgressBar::chunk{
+	background-color: qlineargradient(spread:pad, x1:0.159045, y1:0.614, x2:1, y2:0, stop:0.409091 rgba(85, 255, 255, 232), stop:1 rgba(85, 170, 255, 255));
+	border-radius:3px;
+}</string>
        </property>
        <property name="value">
         <number>0</number>
@@ -404,6 +431,7 @@ QPushButton:pressed{
            <string notr="true">QLCDNumber{
 	
 	background-color: rgb(85, 170, 255);
+	color: rgb(255, 170, 0);
 	border-width:2px;
 	border-radius:10px;
 }</string>
@@ -416,6 +444,7 @@ QPushButton:pressed{
            <string notr="true">QLCDNumber{
 	
 	background-color: rgb(85, 170, 255);
+	color: rgb(255, 170, 0);
 	border-width:2px;
 	border-radius:10px;
 }</string>
@@ -428,6 +457,7 @@ QPushButton:pressed{
            <string notr="true">QLCDNumber{
 	
 	background-color: rgb(85, 170, 255);
+	color: rgb(255, 170, 0);
 	border-width:2px;
 	border-radius:10px;
 }</string>
@@ -1192,6 +1222,12 @@ QPushButton:pressed{
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
         <widget class="QProgressBar" name="progressBar_search">
+         <property name="styleSheet">
+          <string notr="true">QProgressBar{
+	text-align:center;
+}
+</string>
+         </property>
          <property name="value">
           <number>0</number>
          </property>
