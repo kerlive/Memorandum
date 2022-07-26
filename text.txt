@@ -3,6 +3,6 @@
 Memorandum Lite is a free opensource software programmed in Python3, based on PyQt5.
 
 Copyright (c) 2022 Kevin
-Author: Kevin Chan(E) 陈作乾（中） ケン　チェー（日） https://github.com/kerlive/
+Author: Kevin Chan(E) 陈 作乾（中） ケン・チェン（日） https://github.com/kerlive/
 License:GPL-3.0
-Version:0.1.3
+Version:0.1.5

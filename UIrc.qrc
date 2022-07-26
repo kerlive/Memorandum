@@ -7,6 +7,15 @@
     <file>UI/UI_Element/live.png</file>
     <file>UI/UI_Element/off.png</file>
   </qresource>
+  <qresource prefix="trayicon">
+    <file>UI/UI_Element/PG/PG0.png</file>
+    <file>UI/UI_Element/PG/PG15.png</file>
+    <file>UI/UI_Element/PG/PG30.png</file>
+    <file>UI/UI_Element/PG/PG50.png</file>
+    <file>UI/UI_Element/PG/PG70.png</file>
+    <file>UI/UI_Element/PG/PG85.png</file>
+    <file>UI/UI_Element/PG/PG100.png</file>
+  </qresource>
   <qresource prefix="music">
     <file>Music/Alarm.mp3</file>
   </qresource>

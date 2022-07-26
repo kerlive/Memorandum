@@ -2,7 +2,7 @@
 __author__ = "Kevin Chan"
 __copyright__ = "Copyright (C) 2022 Kevin"
 __license__ = "GPL-3.0"
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 import os
 import sys
@@ -284,6 +284,7 @@ class Main(base_2, form_2):
         
         self.dial_sec.valueChanged.connect(self.timervalue)
         self.dial_min.valueChanged.connect(self.timervalue)
+        self.horizontalSlider.valueChanged.connect(self.timervalue)
         self.TimerStartButton.clicked.connect(self.timerdisplay)
         self.TimerCancelButton.setEnabled(False)
         self.TimerCancelButton.setStyleSheet('color: DarkGray')
@@ -352,6 +353,8 @@ class Main(base_2, form_2):
         self.actionChinese.triggered.connect(self.LangChangeC)
         self.actionJapanese.triggered.connect(self.LangChangeJ)
         self.actionQuit.triggered.connect(app.quit)
+        self.actionQuit.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+        self.actionAbout.setIcon(self.style().standardIcon(QStyle.SP_FileDialogInfoView))
 
         #QTrayIcon
         QApplication.setQuitOnLastWindowClosed(False)
@@ -364,15 +367,40 @@ class Main(base_2, form_2):
         self.trayIcon.activated.connect(self.onTrayIconActivated)
 
         menu = QMenu()
+
+        secMenu = menu.addMenu("Timer")
+
+        self.min5 = QAction("5min",self)
+        self.min5.triggered.connect(lambda: self.quickTimer(5))
+        secMenu.addAction(self.min5)
+
+        self.min15 = QAction("15min",self)
+        self.min15.triggered.connect(lambda: self.quickTimer(15))
+        secMenu.addAction(self.min15)
+
+        self.min45 = QAction("45min",self)
+        self.min45.triggered.connect(lambda: self.quickTimer(45))
+        secMenu.addAction(self.min45)
+
+
+        self.cancelTimer = QAction("Cancel",self)
+        self.cancelTimer.triggered.connect(self.timercancel)
+        menu.addAction(self.cancelTimer)
+        self.cancelTimer.setEnabled(False)
+
+        menu.addSeparator()
         
         show = QAction("Show",self)
-        show.triggered.connect(self.showhide(1))
+        show.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
+        show.triggered.connect(lambda: self.showhide(True))
         menu.addAction(show)
         hide = QAction("Hide",self)
-        hide.triggered.connect(self.showhide(0))
+        hide.setIcon(self.style().standardIcon(QStyle.SP_TitleBarMinButton))
+        hide.triggered.connect(lambda: self.showhide(False))
         menu.addAction(hide)
         
         quit = QAction("Quit",self)
+        quit.setIcon(self.style().standardIcon(QStyle.SP_TitleBarCloseButton))
         quit.triggered.connect(app.quit)
         menu.addAction(quit)
 
@@ -382,7 +410,7 @@ class Main(base_2, form_2):
         About = QMessageBox.information(
             self,
             "About Memorandum Lite",
-            "Memorandum Lite is a free opensource software \n programmed in Python3, based on PyQt5.\n Copyright (c) 2022 Kevin\n Author: Kevin Chan(E) 陈作乾（中） ケン　チェー（日） https://github.com/kerlive/\n License:GPL-3.0\n Version:0.1.4\n",
+            "Memorandum Lite is a free opensource software \n programmed in Python3, based on PyQt5.\n Copyright (c) 2022 Kevin\n Author: Kevin Chan(E) 陈 作乾（中） ケン・チェン（日） https://github.com/kerlive/\n License: GPL-3.0\n Version: 0.1.5\n",
             buttons=QMessageBox.Yes ,
             defaultButton=QMessageBox.Yes,
         )
@@ -394,15 +422,18 @@ class Main(base_2, form_2):
 
     def onTrayIconActivated(self, reason):
         if reason == QSystemTrayIcon.DoubleClick:
-            self.hide()
-        if reason == QSystemTrayIcon.Trigger:
             self.show()
+        if reason == QSystemTrayIcon.Trigger:
+            self.hide()
 
-    def showhide(self,arg):
-        if arg == 0 :
-            return self.hide
-        if arg == 1 :
-            return self.show
+    def showhide(self, bool):
+        if bool == True:
+            self.hide()
+            self.show()
+        if bool == False:
+            self.hide()
+            
+
             
 
     def delAlarm(self):
@@ -718,6 +749,7 @@ class Main(base_2, form_2):
     def timervalue(self):
         self.spinBox_sec.setValue(int(self.dial_sec.value()))
         self.spinBox_min.setValue(int(self.dial_min.value()))
+        self.spinBox_hor.setValue(int(self.horizontalSlider.value()))
 
     def timercancel(self):
         self.Ttimer.stop()
@@ -731,6 +763,11 @@ class Main(base_2, form_2):
         self.TimerStartButton.setStyleSheet('color: black')
         self.TimerCancelButton.setEnabled(False)
         self.TimerCancelButton.setStyleSheet('color: DarkGray')
+
+        self.cancelTimer.setEnabled(False)
+        self.quickTimerEnabled(True)
+
+        self.trayIcon.setIcon(QtGui.QIcon(":/icon/UI/UI_Element/icon/Memorandum_ico.ico"))
 
     def timercounter(self):
         global Tsec, Tmin, Thor, Total, Totalnow
@@ -757,6 +794,8 @@ class Main(base_2, form_2):
         self.lcdNumber_2.display(str(Tmin))
         self.lcdNumber_3.display(str(Tsec))
 
+        self.progress_trayIcon()
+
     def timerdisplay(self):
         global Tsec, Tmin, Thor, Total, Totalnow
         Tsec = self.spinBox_sec.value()
@@ -772,6 +811,40 @@ class Main(base_2, form_2):
         self.TimerStartButton.setStyleSheet('color: DarkGray')
         self.TimerCancelButton.setEnabled(True)
         self.TimerCancelButton.setStyleSheet('color: black')
+
+        self.cancelTimer.setEnabled(True)
+        self.quickTimerEnabled(False)
+
+
+    def quickTimer(self, time):
+        self.spinBox_sec.setValue(0)
+        self.spinBox_min.setValue(time)
+        self.spinBox_hor.setValue(0)
+        self.timerdisplay()
+        self.quickTimerEnabled(False)
+
+    def quickTimerEnabled(self,bool):
+        self.min5.setEnabled(bool)
+        self.min15.setEnabled(bool)
+        self.min45.setEnabled(bool)
+
+    def progress_trayIcon(self):
+        p = self.progressBar_timer.value()
+        match p:
+            case p if p >= 0 and p < 15:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG0.png'))
+            case p if p >= 15 and p < 30:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG15.png'))
+            case p if p >= 30 and p < 50:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG30.png'))
+            case p if p >= 50 and p < 70:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG50.png'))
+            case p if p >= 70 and p < 85:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG70.png'))
+            case p if p >= 85 and p < 100:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG85.png'))
+            case p if p == 100:
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG100.png'))
 
 
     def timepush(self):
