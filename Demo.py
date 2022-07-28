@@ -830,7 +830,23 @@ class Main(base_2, form_2):
 
     def progress_trayIcon(self):
         p = self.progressBar_timer.value()
-        match p:
+
+        if p >= 0 and p < 15:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG0.png'))
+        if p >= 15 and p < 30:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG15.png'))
+        if p >= 30 and p < 50:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG30.png'))
+        if p >= 50 and p < 70:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG50.png'))
+        if p >= 70 and p < 85:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG70.png'))
+        if p >= 85 and p < 100:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG85.png'))
+        if p == 100:
+            self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG100.png'))
+
+        """match p:
             case p if p >= 0 and p < 15:
                 self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG0.png'))
             case p if p >= 15 and p < 30:
@@ -844,7 +860,7 @@ class Main(base_2, form_2):
             case p if p >= 85 and p < 100:
                 self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG85.png'))
             case p if p == 100:
-                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG100.png'))
+                self.trayIcon.setIcon(QtGui.QIcon(':/trayicon/UI/UI_Element/PG/PG100.png'))"""
 
 
     def timepush(self):
