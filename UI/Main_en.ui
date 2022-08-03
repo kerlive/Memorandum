@@ -763,16 +763,26 @@ QProgressBar::chunk{
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_8">
        <item>
-        <widget class="QDial" name="dial_Adays">
+        <widget class="QDial" name="dial_Ahour">
          <property name="maximum">
-          <number>30</number>
+          <number>24</number>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QDial" name="dial_Ahour">
+        <widget class="QDial" name="dial_Asecs">
          <property name="maximum">
-          <number>86400</number>
+          <number>3600</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="verticalSlider">
+         <property name="maximum">
+          <number>30</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
@@ -938,7 +948,7 @@ QProgressBar::chunk{
        </rect>
       </property>
       <property name="title">
-       <string>Alarm Sound</string>
+       <string>Alarm Sound - Preview</string>
       </property>
       <widget class="QLabel" name="label_Music">
        <property name="geometry">
@@ -1129,6 +1139,22 @@ QProgressBar::chunk{
        </property>
        <property name="text">
         <string>Results Filter</string>
+       </property>
+      </widget>
+      <widget class="QSlider" name="sliderFilter">
+       <property name="geometry">
+        <rect>
+         <x>369</x>
+         <y>110</y>
+         <width>231</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>86400</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </widget>

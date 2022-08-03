@@ -297,8 +297,9 @@ class Main(base_2, form_2):
         self.todoButton_Totop.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
         self.updateTodo()
         self.AlarmTimeMM()
-        self.dial_Adays.valueChanged.connect(self.timeCharge)
+        self.dial_Asecs.valueChanged.connect(self.timeCharge)
         self.dial_Ahour.valueChanged.connect(self.timeCharge)
+        self.verticalSlider.valueChanged.connect(self.timeCharge)
         self.todoButton_Check.clicked.connect(self.todoCheck)
         self.todoButton_Del.clicked.connect(self.listDel)
         self.todoButton_Weighup.clicked.connect(self.todoWeighup)
@@ -323,6 +324,7 @@ class Main(base_2, form_2):
         self.MusicAdd_Button.clicked.connect(self.musicAdd)
         self.CancelButton_Alarm.clicked.connect(self.delAlarm)
         
+        self.player.stateChanged.connect(self.blockStopButton)
 
         #Search_Output
         self.filterButton.setEnabled(False)
@@ -336,6 +338,7 @@ class Main(base_2, form_2):
         self.Search_Button.setIcon(self.style().standardIcon(QStyle.SP_FileDialogContentsView))
         self.lineEdit.returnPressed.connect(self.Search_Button.click)
         self.filterButton.clicked.connect(self.tableFilter)
+        self.sliderFilter.valueChanged.connect(self.timeFilterCharge)
 
         self.TimeFilter()
         self.comboBox_2.currentIndexChanged.connect(self.comboDay)
@@ -389,6 +392,14 @@ class Main(base_2, form_2):
         self.cancelTimer.setEnabled(False)
 
         menu.addSeparator()
+
+        self.stopAlarmSound = QAction("Stop Alert",self)
+        self.stopAlarmSound.setIcon(self.style().standardIcon(QStyle.SP_MediaVolumeMuted))
+        self.stopAlarmSound.triggered.connect(self.stopAlarm)
+        menu.addAction(self.stopAlarmSound)
+        self.stopAlarmSound.setEnabled(False)
+
+        menu.addSeparator()
         
         show = QAction("Show",self)
         show.setIcon(self.style().standardIcon(QStyle.SP_TitleBarNormalButton))
@@ -433,8 +444,9 @@ class Main(base_2, form_2):
         if bool == False:
             self.hide()
             
-
-            
+    def blockStopButton(self):
+        if self.player.state() == 0:
+            self.stopAlarmSound.setEnabled(False)
 
     def delAlarm(self):
         if self.listWidget_Alarm.currentRow() == -1:
@@ -489,8 +501,9 @@ class Main(base_2, form_2):
                     self.media_play()
                     m.execute("SELECT Title FROM TODO WHERE Task = ?",str(fooAlarm[1]))
                     tm = str(''.join(map(str,m.fetchall()[0])))
-                    self.trayIcon.showMessage(tm,"Click messagebox to Stop Alarm",20000)
-                    self.trayIcon.messageClicked.connect(self.player.stop)
+                    cnn.commit()
+                    self.trayIcon.showMessage(tm,"Click Stop Button to Stop Alert",3000)
+                    self.stopAlarmSound.setEnabled(True)
                     c.execute("UPDATE TODO SET Alarm = 'None' WHERE Task = "+str(fooAlarm[1])+";")
                     cnn.commit()
                 if day[0] == datetimeNow[0] :
@@ -500,6 +513,10 @@ class Main(base_2, form_2):
 
         cnn.close()
         self.updateAlarm()
+    
+    def stopAlarm(self):
+        self.player.stop()
+        self.stopAlarmSound.setEnabled(False)
 
 
     def musicUpdate(self):
@@ -569,10 +586,10 @@ class Main(base_2, form_2):
         Mtimer.timeout.connect(self.updateTM)
 
     def updateTM(self):
-        self.dateTimeEdit_Alarm.setMinimumDateTime(QtCore.QDateTime.fromString(QtCore.QDateTime.currentDateTime().toString("yyyy/M/d HH:mm AP"),"yyyy/M/d HH:mm AP").addSecs(300))
+        self.dateTimeEdit_Alarm.setMinimumDateTime(QtCore.QDateTime.fromString(QtCore.QDateTime.currentDateTime().toString("yyyy/M/d HH:mm AP"),"yyyy/M/d HH:mm AP").addSecs(120))
     
     def timeCharge(self):
-        charge = QtCore.QDateTime.fromString(QtCore.QDateTime.currentDateTime().toString("yyyy/M/d HH:mm AP"),"yyyy/M/d HH:mm AP").addSecs(self.dial_Ahour.value()).addDays(self.dial_Adays.value())
+        charge = QtCore.QDateTime.fromString(QtCore.QDateTime.currentDateTime().toString("yyyy/M/d HH:mm AP"),"yyyy/M/d HH:mm AP").addSecs(self.dial_Ahour.value()*3600+self.dial_Asecs.value()).addDays(self.verticalSlider.value())
         self.dateTimeEdit_Alarm.setDateTime(charge)
 
     def InsertTodo(self):
@@ -583,6 +600,7 @@ class Main(base_2, form_2):
             db = conpath
             conn = sqlite3.connect(db)
             c = conn.cursor()
+            s = conn.cursor()
 
             c.execute("SELECT Task FROM TODO WHERE Task >= 0 ORDER BY Task;")
             fooid = c.fetchall()
@@ -591,8 +609,19 @@ class Main(base_2, form_2):
             ToDo = self.lineEdit_Todo.text()
             Alarm = self.dateTimeEdit_Alarm.dateTime().toString("yyyy/M/d HH:mm AP")
             if self.checkBox_Alarm.isChecked() == True:
-                c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,Alarm,"Live"))
-                self.checkBox_Alarm.setChecked(False)
+                dbalert = s.execute("SELECT Alarm FROM TODO WHERE Alarm != 'None' ")
+                sameTime = False
+                for a in dbalert:
+                    if Alarm == str(''.join(map(str,a))):
+                        sameTime = True
+                    conn.commit()
+                if sameTime == True:
+                    self.trayIcon.showMessage("Issues happen!","New todo Add, but We can't set alert in same time.")
+                    c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,"None","Live"))
+                    self.checkBox_Alarm.setChecked(False)
+                else:
+                    c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,Alarm,"Live"))
+                    self.checkBox_Alarm.setChecked(False)
             else:
                 c.execute("INSERT INTO TODO VALUES(?, ?, ?, ?)",(taskid,ToDo,"None","Live"))
             conn.commit()
@@ -689,28 +718,31 @@ class Main(base_2, form_2):
             global conpath
             db = conpath
             cnn = sqlite3.connect(db)
-            c = cnn.cursor()
-            c.execute("SELECT Task FROM TODO ORDER BY Task;")
-            fooid = c.fetchall()
+            cx = cnn.cursor()
+            cx.execute("SELECT Task FROM TODO ORDER BY Task;")
+            fooid = cx.fetchall()
             trashid = str(int(''.join(map(str,fooid[0]))) -1)
             ckid = str(self.listWidget_todo.currentRow() +1)
             
             if self.radioButton_Done.isChecked():
-                c.execute("UPDATE TODO SET Task = ? , State = 'Done' WHERE Task = ?;",(trashid,ckid))
+                cx.execute("UPDATE TODO SET Task = ? , State = 'Done' WHERE Task = ?;",(trashid,ckid))
                 cnn.commit()
             else:
-                c.execute("UPDATE TODO SET Task = ? , State = 'Off' WHERE Task = ?;",(trashid,ckid))
+                cx.execute("UPDATE TODO SET Task = ? , State = 'Off' WHERE Task = ?;",(trashid,ckid))
                 cnn.commit()
             
             sort = cnn.cursor()
-            rs = sort.execute("SELECT Task FROM TODO WHERE Task > ? ORDER BY Task;",(ckid))
-            for id in rs:
-                foo = id
-                fooid = str(''.join(map(str,foo)))
-                newid = str(int(''.join(map(str,foo))) - 1)
-                roder = "UPDATE TODO SET Task = "+ newid +" WHERE Task = "+ fooid+";"
-                c.execute(roder)
-                cnn.commit()
+            try:
+                rs = sort.execute("SELECT Task FROM TODO WHERE Task > ? AND State = 'Live' ORDER BY Task;",(ckid))
+                for id in rs:
+                    foo = id
+                    fooid = str(''.join(map(str,foo)))
+                    newid = str(int(''.join(map(str,foo))) - 1)
+                    roder = "UPDATE TODO SET Task = "+ newid +" WHERE Task = "+ fooid+";"
+                    cx.execute(roder)
+                    cnn.commit()
+            except:
+                print("Out of Range!") # when user top the final task, the last task id would be out of range.
             cnn.close()
 
             self.updateTodo()
@@ -976,7 +1008,10 @@ class Main(base_2, form_2):
         conn.close()
         self.filterButton.setEnabled(True)
 
-    
+    def timeFilterCharge(self):
+        ft = QtCore.QTime(QtCore.QTime(0, 0, 0).addSecs(self.sliderFilter.value()))
+        self.timeEdit.setTime(ft)
+
     def TimeFilter(self):
 
         global conpath
