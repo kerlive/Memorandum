@@ -1,1 +1,1 @@
-pyinstaller.exe .\Demo.py --noconfirm -i .\Main_Icon.ico --onefile --windowed --add-data "C:\Users\kevin\Desktop\Compile_to_EXEcutableFile\UI;UI\"
+pyinstaller.exe .\Demo.py --noconfirm -i .\Main_Icon.ico --onefile --windowed --add-data "C:\Users\kevin\Desktop\Compile_to_EXEcutableFile\Memorandum_Project_Lite\UI;UI\"

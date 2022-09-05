@@ -2,6 +2,6 @@
 ---Step.1 install pyinstaller package---
 commandline> pip install pyinstaller
 
----Step.2 compile file to executable file (you need change source absolutePath yourself)---
-commandline> pwd (be sure your local path in source folder)
-commandline> pyinstaller.exe .\Demo.py --noconfirm -i .\Main_Icon.ico --onefile --windowed --add-data "C:\{$folder_absolutePath_in_your_PC}\UI;UI\"
+---Step.2 compile file to executable file (you need change absolute path of source $folder yourself)---
+commandline> pwd (be sure your Current Working Directory in source folder)
+commandline> pyinstaller.exe .\Demo.py --noconfirm -i .\Main_Icon.ico --onefile --windowed --add-data "C:\{$folder_AbsolutePath_in_your_PC}\UI;UI\"
